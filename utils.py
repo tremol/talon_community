@@ -130,11 +130,28 @@ for k, v in mapping.items():
 
 punctuation = set(".,-!?")
 
+token_replace =  {
+    'I\\pronoun': 'I',
+    "I'll": "I'll",
+    "I'm": "I'm",
+    "I've": "I've",
+    "I'd": "I'd",
+}
 
-def parse_word(word, force_lowercase=True):
-    word = str(word).lstrip("\\").split("\\", 1)[0]
-    if force_lowercase:
+# <<<<<<< HEAD
+# def parse_word(word, force_lowercase=True):
+#     word = str(word).lstrip("\\").split("\\", 1)[0]
+#     if force_lowercase:
+#         word = word.lower()
+# =======
+def parse_word(word):
+    word = str(word)
+    if word in token_replace:
+        word = token_replace.get(word)
+    else:
         word = word.lower()
+    word = word.lstrip('\\').split('\\', 1)[0]
+# >>>>>>> various edits
     word = mapping.get(word, word)
     return word
 
@@ -187,7 +204,7 @@ def insert(s):
 
 
 def text(m):
-    insert(join_words(parse_words(m)).lower())
+    insert(join_words(parse_words(m)))
 
 
 def spoken_text(m):
@@ -195,9 +212,14 @@ def spoken_text(m):
 
 
 def sentence_text(m):
-    raw_sentence = join_words(parse_words(m, True))
-    sentence = raw_sentence[0].upper() + raw_sentence[1:]
-    insert(sentence)
+# <<<<<<< HEAD
+#     raw_sentence = join_words(parse_words(m, True))
+#     sentence = raw_sentence[0].upper() + raw_sentence[1:]
+#     insert(sentence)
+# =======
+    text = join_words(parse_words(m))
+    insert(text.capitalize())
+# >>>>>>> various edits
 
 
 def word(m):

@@ -3,7 +3,7 @@
 
 # import eye
 import time
-from talon import ctrl, tap
+from talon import ctrl, tap, cron
 from talon.voice import Context
 
 ctx = Context("mouse")
@@ -70,6 +70,7 @@ def delayed_tripclick(m):
 
 def mouse_scroll(amount):
     def scroll(m):
+        # ctrl.mouse_scroll(y=amount)
         ctrl.mouse_scroll(y=amount)
 
     return scroll
@@ -87,17 +88,21 @@ def mouse_release(m):
 
 keymap = {
     # jsc modified with some voice-code compatibility
-    "righty": delayed_right_click,
+    "(righty | chipper)": delayed_right_click,
     "(click | chiff)": delayed_click,
     "(dubclick | duke)": delayed_dubclick,
-    "(tripclick | triplick)": delayed_tripclick,
+    # "(tripclick | triplick)": delayed_tripclick,
+    "triple click": delayed_tripclick,
     "drag": mouse_drag,
     "release": mouse_release,
     # jsc added
-    "(shift click | shicks)": shift_click,
+    # "(shift click | shicks)": shift_click,
+    "(shift click)": shift_click,
     "(command click | chom lick)": command_click,
-    "wheel down": mouse_scroll(200),
-    "wheel up": mouse_scroll(-200),
+    # "wheel down": mouse_scroll(200),
+    "(wheel down | scrodge)": [mouse_scroll(1)]*1000,
+    # "wheel up": mouse_scroll(-200),
+    "(wheel up | scroop)": [mouse_scroll(-1)]*1000,
 }
 
 ctx.keymap(keymap)

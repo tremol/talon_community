@@ -1,7 +1,7 @@
 from talon.voice import Context, Str, press
 import string
 
-alpha_alt = 'air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip'.split()
+alpha_alt = 'air bat cap drum each fine gust harp sit jury crunch look made near oil pit quench red sun trap urge vest whale plex yank zip'.split()
 
 f_keys = {f'F {i}': f'f{i}' for i in range(1, 13)}
 # arrows are separated because 'up' has a high false positive rate
@@ -31,11 +31,11 @@ symbols = {
     'comma': ',',
     'dot': '.', 'period': '.',
     'semi': ';', 'semicolon': ';',
-    'quote': "'",
+    'quote': "'", 'prime': "'",
     'L square': '[', 'left square': '[', 'left square bracket': '[', 'square': '[',
     'R square': ']', 'right square': ']', 'right square bracket': ']',
     'forward slash': '/', 'slash': '/',
-    'backslash': '\\',
+    'backslash': '\\', 'shalls': '\\',
     'minus': '-', 'dash': '-',
     'equals': '=',
 }
@@ -83,6 +83,11 @@ def get_keys(m):
 def uppercase_letters(m):
     insert(''.join(get_keys(m)).upper())
 
+def first_uppercase(m):
+    letters = get_keys(m)
+    to_insert = letters[0].upper() + ''.join(letters[1:])
+    insert(to_insert)
+
 def press_keys(m):
     mods = get_modifiers(m)
     keys = get_keys(m)
@@ -94,7 +99,8 @@ def press_keys(m):
 
 ctx = Context('basic_keys')
 ctx.keymap({
-    '(uppercase | ship | sky) {basic_keys.alphabet}+ [(lowercase | sunk)]': uppercase_letters,
+    '(ship | sky) {basic_keys.alphabet}+ [(lowercase | sunk)]': first_uppercase,
+    'uppercase {basic_keys.alphabet}+': uppercase_letters,
     '{basic_keys.modifiers}* {basic_keys.alphabet}+': press_keys,
     '{basic_keys.modifiers}* {basic_keys.digits}+': press_keys,
     '{basic_keys.modifiers}* {basic_keys.keys}+': press_keys,

@@ -1,7 +1,7 @@
 import os
 
 from talon.voice import Word, Context, Key, Rep, RepPhrase, Str, press
-from talon import ctrl, clip
+from talon import app, ctrl, clip, ui
 from talon_init import TALON_HOME, TALON_PLUGINS, TALON_USER
 import string
 
@@ -16,7 +16,6 @@ def rot13(i, word, _):
             c = chr((((ord(c) - ord("a")) + 13) % 26) + ord("a"))
         out += c
     return out
-
 
 formatters = {
     "cram": (True, lambda i, word, _: word if i == 0 else word.capitalize()),
@@ -36,7 +35,7 @@ formatters = {
     "dunder": (True, lambda i, word, _: "__%s__" % word if i == 0 else word),
     "camel": (True, lambda i, word, _: word if i == 0 else word.capitalize()),
     "snake": (True, lambda i, word, _: word if i == 0 else "_" + word),
-    "dot": (True, lambda i, word, _: "." + word if i == 0 else "_" + word),
+    # "dot": (True, lambda i, word, _: "." + word if i == 0 else "_" + word),
     "smash": (True, lambda i, word, _: word),
     # spinal or kebab?
     "spine": (True, lambda i, word, _: word if i == 0 else "-" + word),
@@ -82,14 +81,33 @@ def FormatText(m):
         sep = ""
     Str(sep.join(words))(None)
 
+def copy_bundle(m):
+    bundle = ui.active_app().bundle
+    clip.set(bundle)
+    app.notify('Copied app bundle', body='{}'.format(bundle))
+
 
 ctx = Context("input")
 
 ctx.keymap(
     {
-        "phrase <dgndictation> [over]": text,
+        'desk right': Key('ctrl-right'),
+        'desk left': Key('ctrl-left'),
+        'toggle cursor': Key('ctrl-alt-k'),
+        "window left": Key('ctrl-alt-left'),
+        "window right": Key('ctrl-alt-right'),
+        "window max": Key('ctrl-alt-up'),
+        "raw talon phrase <phrase> [over]": lambda m: Str(str(m))(None),
+        "raw talon word <word> [over]": lambda m: Str(str(m))(None),
+
+        # C(keymap_raw_talon_phrase__phrase___over_, ['raw', 'talon', 'phrase', C(phrase, ['hello'])])
+        # C(keymap_raw_talon_word__word___over_, ['raw', 'talon', 'word', C(word, ['hello'])])
+        # C(keymap_raw_talon_phrase__phrase___over_, ['raw', 'talon', 'phrase', C(phrase, ['hello', 'world', "I'm", 'a\\determiner', 'person'])])
+        # C(keymap_raw_talon_phrase__dgndictation___over_, ['raw', 'talon', 'phrase', C(dgndictation, ['hello', 'world', 'on', 'a\\determiner', 'person'])])
+
+        "(phrase | say) <dgndictation> [over]": text,
         "sentence <dgndictation> [over]": sentence_text,
-        "comma <dgndictation> [over]": [", ", spoken_text],
+        # "comma <dgndictation> [over]": [", ", spoken_text],
         "period <dgndictation> [over]": [". ", sentence_text],
         # "more <dgndictation> [over]": [" ", text],
         "word <dgnwords>": word,
@@ -170,7 +188,7 @@ ctx.keymap(
         "tip float": "float ",
         "tip double": "double ",
         "args": ["()", Key("left")],
-        "index": ["[]", Key("left")],
+        "(index | brisk)": ["[]", Key("left")],
         "block": [" {}", Key("left enter enter up tab")],
         "empty array": "[]",
         "empty dict": "{}",
@@ -213,7 +231,7 @@ ctx.keymap(
         "state past": "pass",
         "plus": "+",
         "arrow": "->",
-        "call": "()",
+        # "call": "()",
         "indirect": "&",
         "dereference": "*",
         "(op equals | assign | equeft)": " = ",
@@ -271,5 +289,6 @@ ctx.keymap(
         "launcher": Key("cmd-space"),
         "prefies": Key("cmd-,"),
         "put computer to sleep": lambda m: os.system("pmset sleepnow"),
+        'copy active bundle': copy_bundle,
     }
 )

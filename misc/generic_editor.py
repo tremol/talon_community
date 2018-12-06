@@ -277,7 +277,7 @@ keymap = {
     "shift home": Key("shift-home"),
     "wordneck" + optional_numerals: word_neck,
     "wordprev" + optional_numerals: word_prev,
-    "word this": [Key("alt-right"), Key("shift-alt-left")],
+    "select word": [Key("alt-right"), Key("shift-alt-left")],
     "shockey": Key("ctrl-a cmd-left enter up"),
     "shockoon": Key("cmd-right enter"),
     # 'sprinkoon' + numerals: jump_to_eol_and(lambda: press('enter')),
