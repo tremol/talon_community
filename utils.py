@@ -184,7 +184,8 @@ def parse_words(m, natural=False):
     else:
         return []
 
-    words = list(map(lambda current_word: parse_word(current_word, not natural), words))
+    # words = list(map(lambda current_word: parse_word(current_word, not natural), words))
+    words = list(map(lambda current_word: parse_word(current_word), words))
     words = replace_words(words, mappings[2], 2)
     words = replace_words(words, mappings[3], 3)
     return words
