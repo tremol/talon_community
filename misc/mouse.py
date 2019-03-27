@@ -55,6 +55,12 @@ def shift_click(m, button=0, times=1):
 def command_click(m, button=0, times=1):
     press_key_and_click(m, "cmd", button, times)
 
+def command_shift_click(m, button=0, times=1):
+    ctrl.key_press("cmd", cmd=True, shift=True, down=True)
+    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
+    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
+    ctrl.key_press("cmd", cmd=True, shift=True, up=True)
+
 
 def delayed_right_click(m):
     delayed_click(m, button=1)
@@ -99,6 +105,7 @@ keymap = {
     # "(shift click | shicks)": shift_click,
     "(shift click)": shift_click,
     "(command click | chom lick)": command_click,
+    "(command shift click | sync tech)": command_shift_click,
     # "wheel down": mouse_scroll(200),
     "(wheel down | scrodge)": [mouse_scroll(1)]*1000,
     # "wheel up": mouse_scroll(-200),

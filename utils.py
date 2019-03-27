@@ -42,7 +42,7 @@ mapping = {
     "rapper": "wrapper",
     "stack trace": "stacktrace",
     "repose": "repos",
-    "ellis": "elif",
+    # "ellis": "elif",
     "tubal": "tuple",
     "deck": "deque",
     "log it's": "logits",
@@ -120,6 +120,9 @@ mapping = {
     "ron": "run",
     "thorpe": "\t",
     "tharp": "\t",
+    "acxiom": "axion",
+    "doughnut": "donut",
+    "back reaction": "backreaction",
 
     # python
     "if not none": "if not None",

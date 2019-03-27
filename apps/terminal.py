@@ -102,7 +102,7 @@ keymap = {
     "jet checkout master": "git checkout master",
     "jet checkout [<dgndictation>]": ["git checkout ", text],
     "jet checkout branch [<dgndictation>]": ["git checkout -B ", text],
-    "jet commit [<dgndictation>]": ['git commit -m ""', Key("left"), text],
+    "jet commit [<dgndictation>]": ['git commit -am ""', Key("left"), text],
     "jet commit amend [<dgndictation>]": [
         'git commit --amend -m ""',
         Key("left"),
