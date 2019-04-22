@@ -3,7 +3,7 @@
 
 # import eye
 import time
-from talon import ctrl, tap, cron
+from talon import ctrl, tap
 from talon.voice import Context
 
 ctx = Context("mouse")
@@ -55,12 +55,6 @@ def shift_click(m, button=0, times=1):
 def command_click(m, button=0, times=1):
     press_key_and_click(m, "cmd", button, times)
 
-def command_shift_click(m, button=0, times=1):
-    ctrl.key_press("cmd", cmd=True, shift=True, down=True)
-    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
-    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
-    ctrl.key_press("cmd", cmd=True, shift=True, up=True)
-
 
 def delayed_right_click(m):
     delayed_click(m, button=1)
@@ -76,7 +70,6 @@ def delayed_tripclick(m):
 
 def mouse_scroll(amount):
     def scroll(m):
-        # ctrl.mouse_scroll(y=amount)
         ctrl.mouse_scroll(y=amount)
 
     return scroll
@@ -94,22 +87,17 @@ def mouse_release(m):
 
 keymap = {
     # jsc modified with some voice-code compatibility
-    "(righty | chipper)": delayed_right_click,
+    "righty": delayed_right_click,
     "(click | chiff)": delayed_click,
     "(dubclick | duke)": delayed_dubclick,
-    # "(tripclick | triplick)": delayed_tripclick,
-    "triple click": delayed_tripclick,
+    "(tripclick | triplick)": delayed_tripclick,
     "drag": mouse_drag,
     "release": mouse_release,
     # jsc added
-    # "(shift click | shicks)": shift_click,
-    "(shift click)": shift_click,
+    "(shift click | shicks)": shift_click,
     "(command click | chom lick)": command_click,
-    "(command shift click | sync tech)": command_shift_click,
-    # "wheel down": mouse_scroll(200),
-    "(wheel down | scrodge)": [mouse_scroll(1)]*1000,
-    # "wheel up": mouse_scroll(-200),
-    "(wheel up | scroop)": [mouse_scroll(-1)]*1000,
+    "wheel down": mouse_scroll(200),
+    "wheel up": mouse_scroll(-200),
 }
 
 ctx.keymap(keymap)

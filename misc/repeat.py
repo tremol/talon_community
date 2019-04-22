@@ -11,9 +11,9 @@ def repeat(m):
     # TODO: This could be made more intelligent:
     #         * Apply a timeout after which the command will not repeat previous actions
     #         * Prevent stacking of repetitions upon previous repetitions
-    repeat_count = utils.m_to_number(m)
+    repeat_count = utils.extract_num_from_m(m)
 
-    if repeat_count != None and repeat_count >= 2:
+    if repeat_count is not None and repeat_count >= 2:
         repeater = Rep(repeat_count - 1)
         repeater.ctx = talon
         return repeater(None)

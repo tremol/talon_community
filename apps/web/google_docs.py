@@ -1,11 +1,27 @@
+"""
+line numbers: https://chrome.google.com/webstore/detail/line-numbers-for-google-d/mblodabbcapnkgcfnddfpfaamjckjlik?hl=en
+go to line number
+snipline [#]
+cellrang
+wordneck/wordprev
+crew/trail
+cell crew/cell trail
+cursor center/top/bottom
+`menu share`
+"""
+
+import time
+
 from talon.voice import Context, Key, press
 from talon import ctrl
 
-ctx = Context(
-    "google_docs",
-    func=lambda app, win: win.title.endswith("- Google Docs")
-    or "- Google Docs -" in win.title,
-)
+
+def context(app, win):
+    # print(win.title)
+    return win.title.endswith("- Google Docs") or "- Google Docs -" in win.title
+
+
+ctx = Context("google_docs", func=context)
 ctx.keymap(
     {
         "copy": Key("cmd+c"),
@@ -14,19 +30,19 @@ ctx.keymap(
         "paste without formatting": Key("cmd+shift+v"),
         "undo": Key("cmd+z"),
         "redo": Key("cmd+shift+z"),
-        "insert or edit link": Key("cmd+k"),
+        "(insert | edit) link": Key("cmd+k"),
         "open link": Key("alt+enter"),
         "[show] [common] keyboard shortcuts": Key("cmd+/"),
         "save": Key("cmd+s"),
         "print": Key("cmd+p"),
         "open": Key("cmd+o"),
-        "find": Key("cmd+f"),
+        # "find": Key("cmd+f"),
         "find and replace": Key("cmd+shift+h"),
         "find again": Key("cmd+g"),
-        "find previous": Key("cmd+shift+g"),
-        "hide the menus ": Key("ctrl+shift+f"),
+        "find (previous | prev)": Key("cmd+shift+g"),
+        "hide [the] menus ": Key("ctrl+shift+f"),
         "[insert] page break": Key("cmd+enter"),
-        "search the menus": Key("alt+/"),
+        "(search [the] menus | command pallet)": Key("cmd+/"),
         "bold": Key("cmd+b"),
         "italicize": Key("cmd+i"),
         "underline": Key("cmd+u"),
@@ -40,7 +56,7 @@ ctx.keymap(
         "decrease font size": Key("cmd+shift+<"),
         "increase [paragraph] indentation": Key("cmd+]"),
         "decrease [paragraph] indentation": Key("cmd+["),
-        "[apply] normal [text] style": Key("cmd+alt+o"),
+        "[apply] normal (text | style)": Key("cmd+alt+0"),
         "[apply] heading [style] 1": Key("cmd+alt+1"),
         "[apply] heading [style] 2": Key("cmd+alt+2"),
         "[apply] heading [style] 3": Key("cmd+alt+3"),
@@ -80,7 +96,7 @@ ctx.keymap(
             press("f"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "move to previous footnote": lambda m: (
+        "move to (previous | prev) footnote": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("f"),
@@ -88,6 +104,20 @@ ctx.keymap(
         ),
         "context menu": Key("cmd+shift+\\"),
         "file menu": Key("ctrl+alt+f"),
+        "new (file | document | doc)": [
+            Key("ctrl-alt-f"),
+            Key("down"),
+            Key("down"),
+            Key("right"),
+            Key("enter"),
+        ],
+        "rename": [
+            Key("ctrl-`"),
+            lambda m: time.sleep(1),
+            "rename",
+            lambda m: time.sleep(1),
+            Key("enter"),
+        ],
         "edit menu": Key("ctrl+alt+e"),
         "view menu": Key("ctrl+alt+v"),
         "insert menu": Key("ctrl+alt+i"),
@@ -99,13 +129,14 @@ ctx.keymap(
         "input tools menu": Key("cmd+alt+shift+k"),
         "toggle input controls": Key("cmd+shift+k"),
         "select all": Key("cmd+a"),
-        "extend selection one character left": Key("shift+left"),
-        "extend selection one character right": Key("shift+right"),
-        "extend selection one line up": Key("shift+up"),
-        "extend selection one line down": Key("shift+down"),
+        "select line": [Key("cmd-left"), Key("shift-end")],
+        "extend selection [one] character left": Key("shift+left"),
+        "extend selection [one] character right": Key("shift+right"),
+        "extend selection [one] line up": Key("shift+up"),
+        "extend selection [one] line down": Key("shift+down"),
         "extend selection to the beginning of the line": Key("shift+home"),
-        "extend selection one paragraph up": Key("alt+shift+up"),
-        "extend selection one paragraph down": Key("alt+shift+down"),
+        "extend selection [one] paragraph up": Key("alt+shift+up"),
+        "extend selection [one] paragraph down": Key("alt+shift+down"),
         "extend selection to the end of the line": Key("shift+end"),
         "extend selection to the beginning of the document": Key("cmd+shift+up"),
         "extend selection to the end of the document": Key("cmd+shift+down"),
@@ -168,7 +199,7 @@ ctx.keymap(
             press("h"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "[[move] to] previous heading": lambda m: (
+        "[[move] to] (previous | prev) heading": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("h"),
@@ -210,37 +241,37 @@ ctx.keymap(
             press("6"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "[move to] previous heading 1": lambda m: (
+        "[move to] (previous | prev) heading 1": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("1"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "[move to] previous heading 2": lambda m: (
+        "[move to] (previous | prev) heading 2": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("2"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "[move to] previous heading 3": lambda m: (
+        "[move to] (previous | prev) heading 3": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("3"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "[move to] previous heading 4": lambda m: (
+        "[move to] (previous | prev) heading 4": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("4"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "[move to] previous heading 5": lambda m: (
+        "[move to] (previous | prev) heading 5": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("5"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "[move to] previous heading 6": lambda m: (
+        "[move to] (previous | prev) heading 6": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("6"),
@@ -252,7 +283,7 @@ ctx.keymap(
             press("g"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "move to previous media": lambda m: (
+        "move to (previous | prev) media": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("g"),
@@ -264,7 +295,7 @@ ctx.keymap(
             press("o"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "move to previous list": lambda m: (
+        "move to (previous | prev) list": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("o"),
@@ -276,7 +307,7 @@ ctx.keymap(
             press("i"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "move to previous item in the current list": lambda m: (
+        "move to (previous | prev) item in the current list": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("i"),
@@ -288,7 +319,7 @@ ctx.keymap(
             press("l"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "move to previous link": lambda m: (
+        "move to (previous | prev) link": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("l"),
@@ -300,7 +331,7 @@ ctx.keymap(
             press("b"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "move to previous bookmark": lambda m: (
+        "move to (previous | prev) bookmark": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("b"),
@@ -312,7 +343,7 @@ ctx.keymap(
             press("w"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "move to previous formatting change": lambda m: (
+        "move to (previous | prev) formatting change": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("w"),
@@ -324,7 +355,7 @@ ctx.keymap(
             press("r"),
             ctrl.key_press("cmd", ctrl=True, cmd=True, up=True),
         ),
-        "move to the previous edit": lambda m: (
+        "move to the (previous | prev) edit": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("p"),
             press("r"),
@@ -360,7 +391,7 @@ ctx.keymap(
             press("b"),
             ctrl.key_press("shift", ctrl=True, cmd=True, shift=True, up=True),
         ),
-        "move to the previous table column": lambda m: (
+        "move to the (previous | prev) table column": lambda m: (
             ctrl.key_press("shift", ctrl=True, cmd=True, shift=True, down=True),
             press("t"),
             press("v"),
@@ -384,7 +415,7 @@ ctx.keymap(
             press("m"),
             ctrl.key_press("shift", ctrl=True, cmd=True, shift=True, up=True),
         ),
-        "move to the previous table row": lambda m: (
+        "move to the (previous | prev) table row": lambda m: (
             ctrl.key_press("shift", ctrl=True, cmd=True, shift=True, down=True),
             press("t"),
             press("g"),
@@ -402,7 +433,7 @@ ctx.keymap(
             press("t"),
             ctrl.key_press("shift", ctrl=True, cmd=True, shift=True, up=True),
         ),
-        "move to the previous table": lambda m: (
+        "move to the (previous | prev) table": lambda m: (
             ctrl.key_press("shift", ctrl=True, cmd=True, shift=True, down=True),
             press("p"),
             press("t"),
@@ -416,7 +447,7 @@ ctx.keymap(
         "page up": Key("pageup"),
         "page down": Key("pagedown"),
         "move to next misspelling": Key("cmd+'"),
-        "move to previous misspelling": Key("cmd+;"),
+        "move to (previous | prev) misspelling": Key("cmd+;"),
         "insert or move to header": lambda m: (
             ctrl.key_press("cmd", ctrl=True, cmd=True, down=True),
             press("o"),
@@ -438,5 +469,16 @@ ctx.keymap(
         "move focus out of document text": Key("cmd+alt+shift+m"),
         "return focus to document text": Key("esc"),
         "focus containing webpage": Key("ctrl+shift+esc"),
+        "(show | view | toggle) outline [view]": [Key("ctrl-cmd-a"), Key("ctrl-cmd-h")],
+        # "(search menus | command pallet)": Key('cmd-/'),
+        "snipline": [Key("cmd-left"), Key("cmd-shift-right"), Key("backspace")],
+        "snip bullet": [
+            Key("cmd-left"),
+            Key("cmd-shift-right"),
+            Key("backspace"),
+            Key("backspace"),
+            Key("backspace"),
+            Key("backspace"),
+        ],
     }
 )

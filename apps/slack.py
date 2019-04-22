@@ -24,8 +24,8 @@ keymap = {
     "((open | collapse) right pane | toggle sidebar)": Key("cmd-."),
     "direct messages": Key("cmd-shift-k"),
     "(unread threads | new threads | threads)": Key("cmd-shift-t"),
-    "(history [next] | back | backward | baxley)": Key("cmd-["),
-    "(back to the future | ford | forward | fourthly)": Key("cmd-]"),
+    "(history [next] | go back | [go] backward | baxley)": Key("cmd-["),
+    "(back to the future | ford | go forward | fourthly)": Key("cmd-]"),
     "next element": Key("tab"),
     "previous element": Key("shift-tab"),
     "(my stuff | activity)": Key("cmd-shift-m"),
@@ -66,7 +66,7 @@ keymap = {
     "([toggle] video)": Key("v"),
     "invite": Key("a"),
     # Miscellaneous
-    "shortcuts": Key("cmd-/"),
+    "keyboard shortcuts": Key("cmd-/"),
 }
 
 ctx.keymap(keymap)

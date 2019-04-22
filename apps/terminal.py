@@ -1,12 +1,17 @@
+import time
+import json
+
 from talon.voice import Word, Key, Context, Str, press
+from talon_init import TALON_HOME, TALON_PLUGINS, TALON_USER
+from talon import ctrl, ui, resource
 import string
 
-from ..utils import numerals, parse_words, text
+from ..utils import numerals, parse_words, text, is_in_bundles, insert
+from ..bundle_groups import TERMINAL_BUNDLES
 
-# TODO: move application specific commands into their own files: git, apt-get, etc
+# TODO: move application specific commands into their own files: apt-get, etc
 
-terminals = ("com.apple.Terminal", "com.googlecode.iterm2")
-ctx = Context("terminal", func=lambda app, win: any(t in app.bundle for t in terminals))
+ctx = Context("terminal", func=is_in_bundles(TERMINAL_BUNDLES))
 
 mapping = {"semicolon": ";", r"new-line": "\n", r"new-paragraph": "\n\n"}
 
@@ -28,10 +33,67 @@ def dash(m):
         press("-")
         Str("-".join(words))(None)
 
+
 KUBERNETES_PREFIX = "(cube | cube control)"
 
+directory_shortcuts = {
+    "talon home": TALON_HOME,
+    "talon user": TALON_USER,
+    "talon plug-ins": TALON_PLUGINS,
+    "talon community": "~/.talon/user/talon_community",
+}
+
+
+def cd_directory_shortcut(m):
+    directory = directory_shortcuts[m[1]]
+    insert(f"cd {directory}; ls")
+    for _ in range(4):
+        press("left")
+
+
+try:
+    servers = json.load(resource.open("servers.json"))
+except Exception as e:
+    print(f"error opening servers.json: {e}")
+    servers = {}
+
+
+def get_server(m):
+    return servers[" ".join(m["global_terminal.servers"])]
+
+
+def mosh_servers(m):
+    insert(f"mosh {get_server(m)}")
+
+
+def ssh_servers(m):
+    insert(f"ssh {get_server(m)}")
+
+
+def name_servers(m):
+    insert(get_server(m))
+
+
+def ssh_copy_id_servers(m):
+    insert(f"mosh {get_server(m)}")
+
+
+def new_server(m):
+    press("cmd-d")
+    insert(f"ssh {get_server(m)}")
+    press("enter")
+
+
 keymap = {
+    "shell Whereami": "pwd ",
+    "shell home": "~/",
+    "lefty": Key("ctrl-a"),
+    "ricky": Key("ctrl-e"),
     "(pain new | split vertical)": Key("cmd-d"),
+    "new {global_terminal.servers}": new_server,
+    # talon
+    "tail talon": "tail -f ~/.talon/talon.log",
+    "talon reple": "~/.talon/bin/repl",
     # some habits die hard
     "troll char": Key("ctrl-c"),
     "reverse": Key("ctrl-r"),
@@ -53,12 +115,19 @@ keymap = {
         Key("left"),
         text,
     ],
+    "cd {terminal.directory_shortcuts}": cd_directory_shortcut,
     "(ls | run ellis | run alice)": "ls\n",
     "(la | run la)": "ls -la\n",
-    "durrup": "cd ..; ls\n",
+    # "durrup": "cd ..; ls\n",
     "go back": "cd -\n",
     "dash <dgndictation> [over]": dash,
     "pseudo": "sudo ",
+    "(redo pseudo | pseudo [make me a] sandwich)": [
+        Key("up"),
+        Key("ctrl-a"),
+        "sudo ",
+        Key("enter"),
+    ],
     "shell C H mod": "chmod ",
     "shell clear": [Key("ctrl-c"), "clear\n"],
     "shell copy [<dgndictation>]": ["cp ", text],
@@ -78,9 +147,16 @@ keymap = {
     "shell cat [<dgndictation>]": ["cat ", text],
     "shell X args [<dgndictation>]": ["xargs ", text],
     "shell mosh": "mosh ",
+    "shell mosh {global_terminal.servers}": mosh_servers,
+    "shell SSH {global_terminal.servers}": ssh_servers,
+    # "shell server {terminal.servers}": name_servers,
+    "shell SSH copy id {global_terminal.servers}": ssh_copy_id_servers,
     "shell M player": "mplayer ",
     "shell nvidia S M I": "nvidia-smi ",
     "shell R sync": "./src/dotfiles/sync_rsync ",
+    "shell tail": "tail ",
+    "shell tail follow": "tail -f ",
+    "shall count lines": "wc -l ",
     # python
     "create virtual environment": ["virtualenv -p python3 venv", Key("enter")],
     "activate virtual environment": [
@@ -92,48 +168,10 @@ keymap = {
     "apt get install": "apt-get install ",
     "apt get update": "apt-get update ",
     "apt get upgrade": "apt-get upgrade ",
-    # git
-    "jet [<dgndictation>]": ["git ", text],
-    "jet add [<dgndictation>]": ["git add ", text],
-    "jet branch": "git branch",
-    "jet branch delete [<dgndictation>]": ["git branch -D ", text],
-    "jet branch all [<dgndictation>]": ["git branch -a ", text],
-    "jet clone [<dgndictation>]": ["git clone ", text],
-    "jet checkout master": "git checkout master",
-    "jet checkout [<dgndictation>]": ["git checkout ", text],
-    "jet checkout branch [<dgndictation>]": ["git checkout -B ", text],
-    "jet commit [<dgndictation>]": ['git commit -am ""', Key("left"), text],
-    "jet commit amend [<dgndictation>]": [
-        'git commit --amend -m ""',
-        Key("left"),
-        text,
-    ],
-    "jet commit all [<dgndictation>]": ['git commit -a -m ""', Key("left"), text],
-    "jet diff [<dgndictation>]": ["git diff ", text],
-    "jet history": "git hist ",
-    "jet (init | initialize)": "git init ",
-    "jet log": "git log ",
-    "jet merge [<dgndictation>]": ["git merge ", text],
-    "jet move [<dgndictation>]": ["git mv ", text],
-    "jet pull [<dgndictation>]": ["git pull ", text],
-    "jet pull (base | re-base | rebase | re base) [<dgndictation>]": [
-        "git pull --rebase ",
-        text,
-    ],
-    "jet push [<dgndictation>]": ["git push ", text],
-    "jet push force [<dgndictation>]": ["git push --force", text],
-    "jet rebase continue": "git rebase --continue",
-    "jet rebase [<dgndictation>]": ["git rebase ", text],
-    "jet remove [<dgndictation>]": ["git rm ", text],
-    "jet reset": "git reset ",
-    "jet reset hard": "git reset --hard ",
-    "jet show": "git show ",
-    "jet stash": "git stash ",
-    "jet stash apply": "git stash apply ",
-    "jet status": "git status ",
     # Tools
-    "(grep | grip)": ["grep  .", Key("left left")],
-    "gripper": ["grep -r  .", Key("left left")],
+    # "(grep | grip)": ["grep  .", Key("left left")],
+    "(grep | grip)": "grep ",
+    # "gripper": ["grep -r  .", Key("left left")],
     "pee socks": "ps aux ",
     "vi": "vi ",
     # python
@@ -142,7 +180,8 @@ keymap = {
     "pip install requirements": "pip install -r ",
     "pip install editable": "pip install -e ",
     "pip install this": "pip install -e .",
-    "pip install upgrade": "pip install --upgrade ",
+    "pip install local": "pip install -e .",
+    "pip [install] upgrade": "pip install --upgrade ",
     "pip uninstall": "pip uninstall ",
     "pip list": "pip list",
     # kubectl
@@ -187,26 +226,49 @@ keymap = {
     KUBERNETES_PREFIX + "help": "kubectl help ",
     KUBERNETES_PREFIX + "plugin": "kubectl plugin ",
     KUBERNETES_PREFIX + "version": "kubectl version ",
+    KUBERNETES_PREFIX
+    + "shell": ["kubectl exec -it  -- /bin/bash"]
+    + [Key("left")] * 13,
     # conda
     "conda install": "conda install ",
     "conda list": "conda list ",
     # tmux
-    "tmux new session": "tmux ",
+    "T mux new session": "tmux ",
+    "T mux scroll": [Key("ctrl-b"), Key("[")],
+    # other
+    "shell make": "make\n",
+    "shell jobs": "jobs\n",
 }
 
-for action in ('get', 'delete', 'describe'):
-    for object in ('nodes', 'jobs', 'pods', ''):
+for action in ("get", "delete", "describe"):
+    for object in ("nodes", "jobs", "pods", "namespaces", "services", "events", ""):
         if object:
-            object = object + ' '
-        command = f'{KUBERNETES_PREFIX} {action} {object}'
-        typed = f'kubectl {action} {object}'
+            object = object + " "
+        command = f"{KUBERNETES_PREFIX} {action} {object}"
+        typed = f"kubectl {action} {object}"
         keymap.update({command: typed})
 
-keymap.update({"pain " + str(i): Key("alt-" + str(i)) for i in range(10)})
+keymap.update({"(pain | bang) " + str(i): Key("alt-" + str(i)) for i in range(10)})
 
 ctx.keymap(keymap)
+ctx.set_list("directory_shortcuts", directory_shortcuts.keys())
+# ctx.set_list("servers", servers.keys())
 
 
+def shell_rerun(m):
+    # switch_app(name='iTerm2')
+    app = ui.apps(bundle="com.googlecode.iterm2")[0]
+    ctrl.key_press("c", ctrl=True, app=app)
+    time.sleep(0.05)
+    ctrl.key_press("up", app=app)
+    ctrl.key_press("enter", app=app)
+
+
+global_ctx = Context("global_terminal")
+global_ctx.keymap(
+    {"shell rerun": shell_rerun, "shell server {global_terminal.servers}": name_servers}
+)
+global_ctx.set_list("servers", servers.keys())
 # module.exports = {
 #   permissions: "chmod "
 #   access: "chmod "

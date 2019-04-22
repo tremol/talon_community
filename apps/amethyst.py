@@ -1,14 +1,18 @@
-from talon import ui
+import os
+import json
+
+from talon import ui, resource
 from talon.voice import Key, Context
+
+from .. import utils
 
 ctx = Context(
     "amethyst", func=lambda app, win: bool(ui.apps(bundle="com.amethyst.Amethyst"))
 )
 
 keymap = {
-    # 'desk <dgndictation>': desk,
-    "window next screen": Key("ctrl-alt-shift-l"),
-    "window (previous|prev) screen": Key("ctrl-alt-shift-h"),
+    # "window next screen": Key("ctrl-alt-shift-l"),
+    # "window (previous|prev) screen": Key("ctrl-alt-shift-h"),
     "window next": Key("alt-shift-j"),
     "window previous": Key("alt-shift-k"),
     "window move desk": Key("ctrl-alt-shift-h"),
@@ -18,20 +22,15 @@ keymap = {
     "window move main": Key("alt-shift-enter"),
     "window grow": Key("alt-shift-l"),
     "window shrink": Key("alt-shift-h"),
+    "window reevaluate": Key("alt-shift-z"),
 }
 
-single_digits = "0123456789"
-keymap.update({"desk %s" % digit: Key("ctrl-%s" % digit) for digit in single_digits})
+screen_mapping = {"1": "w", "2": "e", "3": "r", "4": "q"}
 keymap.update(
     {
-        "window move desk %s" % digit: Key("ctrl-alt-shift-%s" % digit)
-        for digit in single_digits
+        "window screen %s" % name: Key("ctrl-alt-shift-%s" % screen_mapping[name])
+        for name in screen_mapping.keys()
     }
-)
-
-screen_mapping = {"1": "w", "2": "e", "3": "r", "4": "t"}
-keymap.update(
-    {"window screen %s" % digit: Key("ctrl-alt-shift-%s" % digit) for digit in "1234"}
 )
 
 ctx.keymap(keymap)
