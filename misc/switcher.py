@@ -44,7 +44,7 @@ ctx.keymap(
         "fox skype": lambda x: switch_app(x, "Skype"),
         # "fox skype": lambda x: switch_app(x, "Skype for Business"),
         # "fox signal": lambda x: switch_app(x, "Signal"),
-        "system preferences": lambda x: switch_app(x, "System Preferences"),
+        # "(system preferences | sispref)": lambda x: launch_app(x, "System Preferences"), # doesn't work for some reason...
     }
 )
 

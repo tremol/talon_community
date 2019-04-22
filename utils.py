@@ -42,8 +42,8 @@ def replace_words(words, mapping, count):
     i = 0
     while i < len(words) - count + 1:
         phrase = words[i : i + count]
-        key = " ".join(phrase)#.lower() # add lower if you want to use natural capitalization but I have only lowercase in the replace_words filetkeys
-        if key in mapping: 
+        key = " ".join(phrase)
+        if key in mapping:
             new_words.append(mapping[key])
             i = i + count
         else:

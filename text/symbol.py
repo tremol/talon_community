@@ -13,6 +13,8 @@ keymap = {
     "colon": ":",
     "(lparen | [left] paren | precorp )": "(",
     "(rparen | are paren | right paren | precose)": ")",
+    "(lbrack | [left] bracket | brackorp )": "[",
+    "(rbrack | are bracket | right bracket | brackose)": "]",
     "(brace | left brace | kirksorp)": "{",
     "(rbrace | are brace | right brace | kirkos)": "}",
     "(angle | left angle | less than)": "<",

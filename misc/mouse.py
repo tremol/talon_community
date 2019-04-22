@@ -56,6 +56,13 @@ def command_click(m, button=0, times=1):
     press_key_and_click(m, "cmd", button, times)
 
 
+def command_shift_click(m, button=0, times=1):
+    ctrl.key_press("cmd", cmd=True, shift=True, down=True)
+    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
+    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
+    ctrl.key_press("cmd", cmd=True, shift=True, up=True)
+
+
 def delayed_right_click(m):
     delayed_click(m, button=1)
 
@@ -87,8 +94,9 @@ def mouse_release(m):
 
 keymap = {
     # jsc modified with some voice-code compatibility
-    "righty": delayed_right_click,
-    "(click | chiff)": delayed_click,
+    "(righty | chipper)": delayed_right_click,
+    "(click)": delayed_click,
+    # "(click | chiff)": delayed_click,
     "(dubclick | duke)": delayed_dubclick,
     "(tripclick | triplick)": delayed_tripclick,
     "drag": mouse_drag,
@@ -96,6 +104,7 @@ keymap = {
     # jsc added
     "(shift click | shicks)": shift_click,
     "(command click | chom lick)": command_click,
+    "(command shift click | sync tech)": command_shift_click,
     "wheel down": mouse_scroll(200),
     "wheel up": mouse_scroll(-200),
 }

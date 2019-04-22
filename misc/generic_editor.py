@@ -201,7 +201,7 @@ ctx.keymap(
         "(go line end | ricky)": Key("cmd-right"),
         "(go line before end | smear)": Key("cmd-right left"),
         # insertions
-        "([insert] line break | sky turn)": Key("shift-enter"),
+        "([insert] line break | sky turn | sky shock)": Key("shift-enter"),
         "([insert] new line below | slap)": Key("cmd-right enter"),
         "([insert] new line above | shocker)": Key("ctrl-a cmd-left enter up"),
         "([insert] duplicate line | jolt)": Key(
@@ -218,7 +218,7 @@ ctx.keymap(
         # selecting
         "(select find right | crew) <dgndictation>": select_text_to_right_of_cursor,
         "(select find left | trail) <dgndictation>": select_text_to_left_of_cursor,
-        "(select this word | word this)": Key("alt-right shift-alt-left"),
+        "(select [this] word)": Key("alt-right shift-alt-left"),
         "(select this line | shackle)": Key("cmd-right shift-cmd-left"),
         "(select above | shift home)": Key("shift-home"),
         "(select up | shreep)": Key("shift-up"),
@@ -226,12 +226,12 @@ ctx.keymap(
         "(select all | olly | ali)": Key("cmd-a"),
         "(select left | shrim | shlicky)": Key("shift-left"),
         "(select right | shrish | shricky)": Key("shift-right"),
-        "(select word number {generic_editor.n}* above | wordpreev {generic_editor.n}*)": word_prev,
-        "big word preev {generic_editor.n}*": big_word_prev,
-        "big word neck {generic_editor.n}*": big_word_neck,
-        "(select word number {generic_editor.n}* below | wordneck {generic_editor.n}*)": word_neck,
+        # "(select word number {generic_editor.n}* above | wordpreev {generic_editor.n}*)": word_prev,
+        # "big word preev {generic_editor.n}*": big_word_prev,
+        # "big word neck {generic_editor.n}*": big_word_neck,
+        # "(select word number {generic_editor.n}* below | wordneck {generic_editor.n}*)": word_neck,
         "(select word left | scram)": Key("alt-shift-left"),
-        "(select word right | scrish)": Key("alt-shift-right"),
+        "(select word right | scrish | skittish)": Key("alt-shift-right"),
         "(select line left | lecksy)": Key("cmd-shift-left"),
         "(select line right | ricksy)": Key("cmd-shift-right"),
     }

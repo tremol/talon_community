@@ -22,16 +22,18 @@ ctx.keymap(
         "[switch] tab (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8)": jump_tab,
         "[switch] tab (end | rightmost)": Key("cmd-9"),
         # zooming
-        "zoom in": Key("cmd-="),
-        "zoom out": Key("cmd--"),
+        "(zoom in | shompla)": Key("cmd-="),
+        "(zoom out | shaman)": Key("cmd--"),
         "zoom normal": Key("cmd-0"),
         # window control
         "(open | new) window": Key("cmd-n"),
         "window close": Key("cmd-shift-w"),
         "([switch] window next | gibby)": Key("cmd-`"),
         "([switch] window (previous | preev) | shibby)": Key("cmd-shift-`"),
-        "[switch] space (right | next)": Key("ctrl-right"),
-        "[switch] space (left | previous | preev)": Key("ctrl-left"),
+        # "[switch] space (right | next)": Key("ctrl-right"),
+        "desk right": Key("ctrl-right"),
+        # "[switch] space (left | previous | preev)": Key("ctrl-left"),
+        "desk left": Key("ctrl-left"),
         "(minimise window | curtail)": Key("cmd-m"),
         "show app windows": Key("ctrl-down"),
         # application navigation

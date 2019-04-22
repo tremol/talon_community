@@ -137,7 +137,7 @@ context.keymap(
         # "mendeley": Key("cmd-shift-m"),
         "(add | save) to mendeley": mendeley,
         # TODO: this should probably be specific to the page
-        "submit": Key("cmd-enter"),
+        # "submit": Key("cmd-enter"),
         # zotero
         "zotero": Key("cmd-shift-z"),
         # rearrange tabs: https://chrome.google.com/webstore/detail/rearrange-tabs/ccnnhhnmpoffieppjjkhdakcoejcpbga
