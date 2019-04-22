@@ -7,7 +7,7 @@ from time import sleep
 import json
 import os
 
-from .bundle_groups import TERMINAL_BUNDLES, FILETYPE_SENSITIVE_BUNDLES
+from .bundle_groups import TERMINAL_BUNDLES, FILETYPE_SENSITIVE_BUNDLES, VIM_BUNDLES
 
 VIM_IDENTIFIER = "(Vim)"
 INCLUDE_TEENS_IN_NUMERALS = False
@@ -296,6 +296,8 @@ def is_vim(app, win):
     if is_in_bundles(TERMINAL_BUNDLES)(app, win):
         if VIM_IDENTIFIER in win.title:
             return True
+    if is_in_bundles(VIM_BUNDLES)(app, win):
+        return True
     return False
 
 

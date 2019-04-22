@@ -21,6 +21,7 @@ ctx.vocab = [
     'electromagnetic',
     'electromagnetism',
     'vim',
+    'github',
 ]
 ctx.vocab_remove = []
 

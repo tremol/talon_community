@@ -94,6 +94,7 @@ keymap = {
     # talon
     "tail talon": "tail -f ~/.talon/talon.log",
     "talon reple": "~/.talon/bin/repl",
+    "talon grep [user]": ["grep -r  ~/.talon/user/"] + [Key('left')]*15,
     # some habits die hard
     "troll char": Key("ctrl-c"),
     "reverse": Key("ctrl-r"),

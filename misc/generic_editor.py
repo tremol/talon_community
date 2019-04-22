@@ -202,8 +202,8 @@ ctx.keymap(
         "(go line before end | smear)": Key("cmd-right left"),
         # insertions
         "([insert] line break | sky turn | sky shock)": Key("shift-enter"),
-        "([insert] new line below | slap)": Key("cmd-right enter"),
-        "([insert] new line above | shocker)": Key("ctrl-a cmd-left enter up"),
+        "([insert] new line below | slap | shockoon)": Key("cmd-right enter"),
+        "([insert] new line above | shockey)": Key("ctrl-a cmd-left enter up"),
         "([insert] duplicate line | jolt)": Key(
             "ctrl-a cmd-left shift-down cmd-c down cmd-v"
         ),
@@ -224,8 +224,8 @@ ctx.keymap(
         "(select up | shreep)": Key("shift-up"),
         "(select down | shroom)": Key("shift-down"),
         "(select all | olly | ali)": Key("cmd-a"),
-        "(select left | shrim | shlicky)": Key("shift-left"),
-        "(select right | shrish | shricky)": Key("shift-right"),
+        "(select left | shrim)": Key("shift-left"),
+        "(select right | shrish)": Key("shift-right"),
         # "(select word number {generic_editor.n}* above | wordpreev {generic_editor.n}*)": word_prev,
         # "big word preev {generic_editor.n}*": big_word_prev,
         # "big word neck {generic_editor.n}*": big_word_neck,
@@ -234,5 +234,10 @@ ctx.keymap(
         "(select word right | scrish | skittish)": Key("alt-shift-right"),
         "(select line left | lecksy)": Key("cmd-shift-left"),
         "(select line right | ricksy)": Key("cmd-shift-right"),
+        # searching
+        "(search | marco)": Key("cmd-f"),
+        "marneck": Key("cmd-g"),
+        "marpreev": Key("cmd-shift-g"),
+        "marthis": [Key("alt-right"), Key("shift-alt-left"), Key("cmd-f"), Key("enter")],
     }
 )

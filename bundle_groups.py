@@ -21,6 +21,8 @@ EDITOR_BUNDLES = (
 
 BROWSER_BUNDLES = ("org.mozilla.firefox", "com.google.Chrome")
 
+VIM_BUNDLES = ("com.extropy.oni",)
+
 FILETYPE_SENSITIVE_BUNDLES = (
     # *BROWSER_BUNDLES,
     *EDITOR_BUNDLES,

@@ -11,8 +11,6 @@ ctx.keymap(
     {
         "state any": ["any()", Key("left")],
         "dunder in it": "__init__",
-        "dot pie": ".py",
-        "dot pipe": ".py",
         "self assign <dgndictation> [over]": [
             "self.",
             snake_text,

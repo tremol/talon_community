@@ -11,6 +11,8 @@ from ..utils import (
     word,
     parse_words,
     spoken_text,
+    is_not_vim,
+    is_vim,
 )
 
 
@@ -78,31 +80,35 @@ surrounders = normalise_keys(
 formatters.update(surrounders)
 
 
-def FormatText(m):
+def FormatText(m, vim=False):
     fmt = []
 
     for w in m._words:
         if isinstance(w, Word) and w != "over":
             fmt.append(w.word)
-    words = parse_words(m, True) # add True so champ works properly
+    words = parse_words(m, True) # add True so champ preserves natural capitalization
     if not words:
-        try:
-            with clip.capture() as s:
-                press("cmd-c")
-            words = s.get().split(" ")
-        except clip.NoChange:
+        if not vim:
+            try:
+                with clip.capture() as s:
+                    press("cmd-c")
+                words = s.get().split(" ")
+            except clip.NoChange:
+                words = [""]
+        else:
             words = [""]
 
     tmp = []
 
     smash = False
     for i, w in enumerate(words):
-        word = parse_word(w, False) # change to False so champ works properly
+        word = parse_word(w, False) # change to False so champ preserves natural capitalization
         for name in reversed(fmt):
             smash, func = formatters[name]
             word = func(i, word, i == len(words) - 1)
         tmp.append(word)
 
+    print(tmp)
     sep = "" if smash else " "
     insert(sep.join(tmp))
     # if no words, move cursor inside surrounders
@@ -110,19 +116,32 @@ def FormatText(m):
         for i in range(len(tmp[0]) // 2):
             press("left")
 
-
-ctx = Context("formatters")
-
-ctx.keymap(
-    {
+universal_formatters_keymap = {
         "(phrase | say) <dgndictation> [over]": spoken_text, # changed from text to spoken_text for natural capitalization
-        # "champ <dgndictation> [over]": champ_text,
         "sentence <dgndictation> [over]": sentence_text,
         "(comma | ,) <dgndictation> [over]": [", ", spoken_text],
         "period <dgndictation> [over]": [". ", sentence_text],
         "word <dgnwords>": word,
+}
+
+ctx = Context("formatters_not_vim", func=is_not_vim)
+
+ctx.keymap(
+    {
+        **universal_formatters_keymap,
         "(%s)+ [<dgndictation>] [over]" % (" | ".join(formatters)): FormatText,
         # to match surrounder command + another command (i.e. not dgndictation)
         "(%s)+" % (" | ".join(surrounders)): FormatText,
+    }
+)
+
+ctx = Context("formatters_vim", func=is_vim)
+
+ctx.keymap(
+    {
+        **universal_formatters_keymap,
+        "(%s)+ [<dgndictation>] [over]" % (" | ".join(formatters)): lambda m: FormatText(m, vim=True),
+        # to match surrounder command + another command (i.e. not dgndictation)
+        "(%s)+" % (" | ".join(surrounders)): lambda m: FormatText(m, vim=True),
     }
 )

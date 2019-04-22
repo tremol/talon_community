@@ -8,6 +8,10 @@ ctx = Context("general_lang")
 
 ctx.keymap(
     {
+        # File extensions
+        "dot pie": ".py",
+        "dot pipe": ".py",
+
         # Operators
         "(op equals | assign | equeft)": " = ",
         "(op (minus | subtract) | deminus)": " - ",
