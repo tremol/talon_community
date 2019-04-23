@@ -36,6 +36,7 @@ ctx.keymap(
         "launch {switcher.launch}": launch_app,
         # custom switchers here
         "madam": lambda x: switch_app(x, "Atom"),
+        "matthew": lambda x: switch_app(x, "Mathematica"),
         "fox (chrome | web)": lambda x: switch_app(x, "Google Chrome"),
         "fox outlook": lambda x: switch_app(x, "Outlook"),
         "fox slack": lambda x: switch_app(x, "Slack"),

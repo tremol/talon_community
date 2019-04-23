@@ -49,6 +49,7 @@ ctx.keymap(
         "simplify that": "//FullSimplify",
         "short simplify that": "//Simplify",
         "complex expand": "//ComplexExpand",
+        "unit convert": "//UnitConvert",
 
         # greek letters
         "greek {basic_keys.alphabet}": greek,
@@ -64,5 +65,6 @@ ctx.keymap(
         "rho": [Key('escape'), Key('r'), Key('escape')],
         "sigma": [Key('escape'), Key('s'), Key('escape')],
         "omega": [Key('escape'), Key('w'), Key('escape')],
+        "chai": [Key('escape c escape')],
     }
 )

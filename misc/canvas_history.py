@@ -27,7 +27,7 @@ class History:
         if cmd == 'p.end' and phrase:
             self.history.append(phrase)
             self.history = self.history[-hist_len:]
-            self.canvas.freeze()
+            # self.canvas.freeze()
 
     def draw(self, canvas):
         text = self.history[:]

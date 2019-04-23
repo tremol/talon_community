@@ -22,7 +22,7 @@ simple_keys = normalise_keys(
         "home": "home",
         "pagedown": "pagedown",
         "pageup": "pageup",
-        "end": "end",
+        "go to end": "end",
     }
 )
 
@@ -34,13 +34,13 @@ symbols = normalise_keys(
         # ``text/symbol.py``.
         "(tick | back tick)": "`",
         "(comma | ,)": ",",
-        "(dot | period)": ".",
+        "(dot | period | point)": ".",
         "(semicolon | semi)": ";",
-        "(quote | quatchet)": "'",
+        "(quote | quatchet | prime)": "'",
         "(square | L square | left square | left square bracket)": "[",
         "(R square | right square | right square bracket)": "]",
         "(slash | forward slash)": "/",
-        "backslash": "\\",
+        "(backslash | shalls)": "\\",
         "(minus | dash)": "-",
         "(equals | smaqual)": "=",
     }
@@ -98,6 +98,10 @@ def get_keys(m):
 def uppercase_letters(m):
     insert("".join(get_keys(m)).upper())
 
+def first_uppercase(m):
+    letters = get_keys(m)
+    to_insert = letters[0].upper() + ''.join(letters[1:])
+    insert(to_insert)
 
 def press_keys(m):
     mods = get_modifiers(m)
@@ -116,7 +120,9 @@ def press_keys(m):
 ctx = Context("basic_keys")
 ctx.keymap(
     {
-        "(uppercase | ship | sky) {basic_keys.alphabet}+ [(lowercase | sunk)]": uppercase_letters,
+        '(ship | sky) {basic_keys.alphabet}+': first_uppercase,
+        'uppercase {basic_keys.alphabet}+ [(lowercase | sunk)]': uppercase_letters,
+        # "(uppercase | ship | sky) {basic_keys.alphabet}+ [(lowercase | sunk)]": uppercase_letters,
         "{basic_keys.modifiers}* {basic_keys.alphabet}+": press_keys,
         "{basic_keys.modifiers}* {basic_keys.digits}+": press_keys,
         "{basic_keys.modifiers}* {basic_keys.keys}+": press_keys,

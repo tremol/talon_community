@@ -194,8 +194,8 @@ ctx.keymap(
         "(clip copy | stoosh)": Key("cmd-c"),
         "(clip paste | spark)": Key("cmd-v"),
         # motions
-        "(go word left | fame | peg)": Key("alt-left"),
-        "(go word right | fish | fran)": Key("alt-right"),
+        "(go word left | peg)": Key("alt-left"), # fame
+        "(go word right | fran)": Key("alt-right"), # fish
         "(go line after end | derek)": Key("cmd-right space"),
         "(go line start | lefty)": Key("cmd-left"),
         "(go line end | ricky)": Key("cmd-right"),
@@ -212,9 +212,10 @@ ctx.keymap(
         "(delete line left | snip left | snipple)": Key("shift-cmd-left delete"),
         "(delete line right | snip right | snipper)": Key("shift-cmd-right delete"),
         "(delete [this] line)": Key("shift-cmd-right delete delete ctrl-a cmd-left"),
-        "(delete word left | trough | steffi | carmex)": Key("alt-backspace"),
-        "(delete word right | stippy | kite)": Key("alt-delete"),
+        "(delete word left | trough )": Key("alt-backspace"),
+        "(delete word right | kite)": Key("alt-delete"),
         "(delete [this] word | slurpies)": Key("alt-backspace alt-delete"),
+        "(delete previous space | nudgle)": Key('alt-left backspace'),
         # selecting
         "(select find right | crew) <dgndictation>": select_text_to_right_of_cursor,
         "(select find left | trail) <dgndictation>": select_text_to_left_of_cursor,

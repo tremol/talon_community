@@ -25,7 +25,6 @@ def title_case_capitalize_word(index, word, _):
     else:
         return word
 
-
 formatters = normalise_keys(
     {
         "tree": (True, lambda i, word, _: word[0:3] if i == 0 else ""),
@@ -46,7 +45,7 @@ formatters = normalise_keys(
             True,
             lambda i, word, _: "$" + word if i == 0 else word.capitalize(),
         ),
-        "champ": (True, lambda i, word, _: word.capitalize() if i == 0 else " " + word),
+        "champ": (False, lambda i, word, _: word.capitalize() if i == 0 else word),
         "lowcram": (
             True,
             lambda i, word, _: "@" + word if i == 0 else word.capitalize(),
@@ -56,7 +55,7 @@ formatters = normalise_keys(
         "snake": (True, lambda i, word, _: word if i == 0 else "_" + word),
         "dotsnik": (True, lambda i, word, _: "." + word if i == 0 else "_" + word),
         "smash": (True, lambda i, word, _: word.lower()), # remove spaces and lowercase everything
-        "lower": (False, lambda i, word, _: word.lower()), # only lowercase everything
+        "lowercase": (False, lambda i, word, _: word.lower()), # lowercase everything, keeping spaces
         "(spine | kebab)": (True, lambda i, word, _: word if i == 0 else "-" + word),
         "title": (False, title_case_capitalize_word),
     }
@@ -108,7 +107,6 @@ def FormatText(m, vim=False):
             word = func(i, word, i == len(words) - 1)
         tmp.append(word)
 
-    print(tmp)
     sep = "" if smash else " "
     insert(sep.join(tmp))
     # if no words, move cursor inside surrounders
@@ -117,7 +115,7 @@ def FormatText(m, vim=False):
             press("left")
 
 universal_formatters_keymap = {
-        "(phrase | say) <dgndictation> [over]": spoken_text, # changed from text to spoken_text for natural capitalization
+        "(phrase) <dgndictation> [over]": spoken_text, # changed from text to spoken_text for natural capitalization
         "sentence <dgndictation> [over]": sentence_text,
         "(comma | ,) <dgndictation> [over]": [", ", spoken_text],
         "period <dgndictation> [over]": [". ", sentence_text],

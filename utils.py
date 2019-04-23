@@ -312,7 +312,7 @@ def is_filetype(extensions=()):
                 return True
             else:
                 return False
-        return True
+        return False
 
     return matcher
 

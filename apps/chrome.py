@@ -145,7 +145,7 @@ context.keymap(
         # "move tab right": Key("ctrl-shift-right"),
         # "move tab left way": Key("ctrl-shift-down"),
         # vimium
-        "link": link,
+        # "link": link,
         "move tab left": browser.send_to_vimium("<<"),
         "move tab right": browser.send_to_vimium(">>"),
     }

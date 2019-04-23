@@ -1,6 +1,8 @@
 from talon.voice import Context, Key
 
-from ..utils import text
+from ..utils import text, is_in_bundles
+from ..bundle_groups import TERMINAL_BUNDLES
+
 
 PREFIX = "jet "
 
@@ -8,7 +10,8 @@ PREFIX = "jet "
 # git may need to be used outside of the terminal, such as in a browser
 # terminal, or you may need to send git commands to your friends to help them
 # out with their git troubles.
-ctx = Context("git")
+# ctx = Context("git")
+ctx = Context("git", func=is_in_bundles(TERMINAL_BUNDLES))
 
 ctx.keymap(
     {
