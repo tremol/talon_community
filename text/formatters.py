@@ -27,8 +27,8 @@ def title_case_capitalize_word(index, word, _):
 
 formatters = normalise_keys(
     {
-        "tree": (True, lambda i, word, _: word[0:3] if i == 0 else ""),
-        "quad": (True, lambda i, word, _: word[0:4] if i == 0 else ""),
+        "thrack": (True, lambda i, word, _: word[0:3] if i == 0 else ""),
+        "quattro": (True, lambda i, word, _: word[0:4] if i == 0 else ""),
         "(cram | camel)": (
             True,
             lambda i, word, _: word if i == 0 else word.capitalize(),
@@ -122,7 +122,7 @@ universal_formatters_keymap = {
         "word <dgnwords>": word,
 }
 
-ctx = Context("formatters_not_vim", func=is_not_vim)
+ctx = Context("formatters-no_vim", func=is_not_vim)
 
 ctx.keymap(
     {
@@ -133,7 +133,7 @@ ctx.keymap(
     }
 )
 
-ctx = Context("formatters_vim", func=is_vim)
+ctx = Context("formatters-vim", func=is_vim)
 
 ctx.keymap(
     {

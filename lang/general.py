@@ -11,6 +11,7 @@ ctx.keymap(
         # File extensions
         "dot pie": ".py",
         "dot pipe": ".py",
+        "dot tech": ".tex",
 
         # Operators
         "(op equals | assign | equeft)": " = ",

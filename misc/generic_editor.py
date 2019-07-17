@@ -223,7 +223,9 @@ ctx.keymap(
         "(select this line | shackle)": Key("cmd-right shift-cmd-left"),
         "(select above | shift home)": Key("shift-home"),
         "(select up | shreep)": Key("shift-up"),
+        "(select all up | shreepway)": Key("cmd-shift-up"),
         "(select down | shroom)": Key("shift-down"),
+        "(select all down | shroomway)": Key("cmd-shift-down"),
         "(select all | olly | ali)": Key("cmd-a"),
         "(select left | shrim)": Key("shift-left"),
         "(select right | shrish)": Key("shift-right"),
@@ -232,7 +234,7 @@ ctx.keymap(
         # "big word neck {generic_editor.n}*": big_word_neck,
         # "(select word number {generic_editor.n}* below | wordneck {generic_editor.n}*)": word_neck,
         "(select word left | scram)": Key("alt-shift-left"),
-        "(select word right | scrish | skittish)": Key("alt-shift-right"),
+        "(select word right | skittish)": Key("alt-shift-right"), # scrish
         "(select line left | lecksy)": Key("cmd-shift-left"),
         "(select line right | ricksy)": Key("cmd-shift-right"),
         # searching

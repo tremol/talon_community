@@ -51,7 +51,7 @@ modifiers = normalise_keys(
         "command": "cmd",
         "(control | troll)": "ctrl",
         "(shift | sky)": "shift",
-        "(alt | option)": "alt",
+        "(option)": "alt",
     }
 )
 

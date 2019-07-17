@@ -70,6 +70,9 @@ zero_parameter_commands =  {
     "nabla": "nabla",
     "integral": "int",
     "infinity": "infty",
+    "big space": "quad ",
+    "bigger space": "qquad ",
+    "times": "times",
 
     # greek shortcuts
     "alpha": "alpha",
@@ -81,6 +84,8 @@ zero_parameter_commands =  {
     "rho": "rho",
     "sigma": "sigma",
     "theta": "theta",
+    "chai": "chi",
+    "quicksy": "xi",
     "omega": "omega",
 }
 
@@ -234,6 +239,7 @@ ctx.keymap(
         "doubles": " \\\\",
         "shelley": " \\nonumber\\\\",
         "big implies": "  \\quad \\Rightarrow \\quad  ",
+        "implies": "\\Rightarrow \\quad  ",
 
         # delimiters
         "adapting {latex.delimiters}": adapting_delimiters,
@@ -258,6 +264,7 @@ ctx.keymap(
         "(greek | greco) {basic_keys.alphabet}": greek,
         "upper (greek | greco) {basic_keys.alphabet}": upper_greek,
         "{basic_keys.digits} pie": number_pi,
+        # TODO: define a function that references the names of the Greek letters directly
 
         # label and reference commands
         "label {latex.label_reference_commands}": label_command,

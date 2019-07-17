@@ -60,6 +60,9 @@ def resize_window(x, y, w, h):
     rect.y += rect.height * y
     rect.width *= w
     rect.height *= h
+    global avoid_bottom
+    if avoid_bottom:
+        rect.height -= 20
     win.rect = rect
 
 
@@ -110,9 +113,28 @@ def previous_screen(m):
     move_screen(-1)
 
 
+avoid_bottom = True
+
+# def toggle_avoid_bottom(m):
+#     global avoid_bottom
+#     avoid_bottom = not avoid_bottom
+
+def avoid_bottom_on(m):
+    global avoid_bottom
+    avoid_bottom = True
+
+def avoid_bottom_off(m):
+    global avoid_bottom
+    avoid_bottom = False
+
+#TODO: autodetect application and apply avoid bottom or not
+
 ctx = Context("window_management")
 ctx.keymap(
     {
+        # "(toggle avoid bottom | avoid bottom (on | off))": toggle_avoid_bottom,
+        "avoid bottom on": avoid_bottom_on,
+        "avoid bottom off": avoid_bottom_off,
         "(snap | window) left": grid(1, 1, 2, 1),
         "(snap | window) right": grid(2, 1, 2, 1),
         "snap top": grid(1, 1, 1, 2),

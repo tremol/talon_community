@@ -285,7 +285,7 @@ keymap = {
     "sprinkoon" + numerals: jump_to_eol_and(lambda: press("enter")),
     "peach": Key("cmd-t"),
     "peach <dgndictation>": [Key("cmd-t"), text],
-    "peachy <dgndictation>": [Key("cmd-t"), text, Key("enter")],
+    # "peachy <dgndictation>": [Key("cmd-t"), text, Key("enter")],
     "advanced open file": Key("cmd-alt-o"),
     "(pain | bang)" + numerals: change_pain,
     "tab" + numerals: jump_tab,

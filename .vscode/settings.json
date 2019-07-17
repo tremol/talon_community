@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.py~": "python",
+        "*.py.disable": "python"
+    }
+    
+}

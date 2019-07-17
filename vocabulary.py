@@ -23,6 +23,9 @@ ctx.vocab = [
     'vim',
     'github',
     'playthrough',
+    'pycnonuclear',
+    'white dwarf',
+    'polytrope',
 ]
 ctx.vocab_remove = []
 

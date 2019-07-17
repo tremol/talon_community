@@ -91,22 +91,24 @@ def mouse_release(m):
     x, y = click_pos(m)
     ctrl.mouse_click(x, y, up=True)
 
+# smooth scrolling?
+# mouse_scroll(by_lines=False, y=blah)
 
 keymap = {
     # jsc modified with some voice-code compatibility
-    "(righty | chipper)": delayed_right_click,
-    "(click)": delayed_click,
+    "(righty)": delayed_right_click,
+    "(chaff)": delayed_click,
     # "(click | chiff)": delayed_click,
     "(dubclick | duke)": delayed_dubclick,
-    "(tripclick | triplick)": delayed_tripclick,
+    "(tripclick)": delayed_tripclick, # triplick
     "drag": mouse_drag,
     "release": mouse_release,
     # jsc added
     "(shift click | shicks)": shift_click,
     "(command click | chom lick)": command_click,
     "(command shift click | sync tech)": command_shift_click,
-    "wheel down": mouse_scroll(200),
-    "wheel up": mouse_scroll(-200),
+    "(wheel down | scrodge)": mouse_scroll(400),
+    "(wheel up | scroop)": mouse_scroll(-400),
 }
 
 ctx.keymap(keymap)

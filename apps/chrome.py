@@ -96,8 +96,21 @@ def mendeley(m):
     navigate_to_url(f"https://www.mendeley.com/import/?url={get_url()}")
 
 
+websites = {
+    "calendar": "https://calendar.google.com/",
+    "gmail": "https://mail.google.com/mail/u/0/#inbox",
+}
+
+def open_website(m):
+    s = m['GoogleChrome.websites']
+    url = str(websites[s[0]])
+    press("cmd-t")
+    navigate_to_url(url, win=None)
+
 context.keymap(
     {
+        "webs {GoogleChrome.websites}": open_website,
+        "[show] bookmarks [bar]": Key('cmd-shift-b'),
         "(address bar | focus address | focus url | url)": focus_address_bar,
         "copy url": Key("escape y y"),
         "go back": back,
@@ -150,3 +163,5 @@ context.keymap(
         "move tab right": browser.send_to_vimium(">>"),
     }
 )
+
+context.set_list('websites', websites)
