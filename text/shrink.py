@@ -1,22 +1,24 @@
 from talon.voice import Context, Str
-from ..utils import alternatives
+
+# from ..utils import alternatives
 
 ctx = Context("shrink")
 
 
 def shrink_word(m):
-    word = str(m._words[1])
-    if word not in shrink_map:
-        raise Exception("%s not in shrink map" % word)
-    Str(shrink_map[word])(None)
+    # Str(shrink_map[" ".join(m["shrink.words"])])(None)
+    Str(shrink_map[m[1]])(None)
 
 
 shrink_map = {
     "administrator": "admin",
     "alternate": "alt",
     "apartment": "apt",
+    "application": "app",
     "applications": "apps",
+    "argument": "arg",
     "arguments": "args",
+    "attribute": "attr",
     "attributes": "attrs",
     "authentication": "auth",
     "button": "btn",
@@ -74,6 +76,7 @@ shrink_map = {
     "environment": "env",
     "application": "app",
     "inc.": "inc",
+    "include": "inc",
     "_c": "char",
     "administrator": "admin",
     "administrators": "admins",
@@ -148,17 +151,21 @@ shrink_map = {
     "previous": "prev",
     "production": "prod",
     "pseudo": "sudo",
+    "rectangle": "rect",
     "reference": "ref",
     "references": "refs",
     "repeat": "rep",
     "request": "req",
     "result": "res",
     "revision": "rev",
+    "session": "sess",
     "source": "src",
     "standard": "std",
     "standing": "stdin",
     "standout": "stdout",
     "string": "str",
+    "synchronize": "sync",
+    "synthesizer": "synth",
     "system": "sys",
     "temporary": "tmp",
     "text": "txt",
@@ -182,4 +189,11 @@ shrink_map = {
     "december": "dec",
 }
 
+
+def alternatives(options):
+    return " (" + " | ".join(sorted(map(str, options))) + ")"
+
+
 ctx.keymap({"shrink" + alternatives(shrink_map.keys()): shrink_word})
+# ctx.keymap({"shrink {shrink.words}": shrink_word})
+# ctx.set_list("words", shrink_map.keys())

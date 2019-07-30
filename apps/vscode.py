@@ -61,8 +61,8 @@ context.keymap(
         + "until"
         + optional_numerals: select_lines_function,
         # Finding text
-        # "find": Key("cmd-f"),
-        # "find next <dgndictation>": jump_to_next_word_instance,
+        "find": Key("cmd-f"),
+        "find next <dgndictation>": jump_to_next_word_instance,
         # Clipboard
         "clone": Key("alt-shift-down"),
         # Navigation

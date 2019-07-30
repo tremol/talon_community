@@ -7,8 +7,10 @@ running = {}
 launch = {}
 
 
-def switch_app(m=None, name=None):
-    if name is None:
+def lookup_app(m=None, name=None):
+    if isinstance(m, str):
+        name = m
+    elif name is None:
         name = str(m["switcher.running"][0])
 
     full = running.get(name)
@@ -16,14 +18,23 @@ def switch_app(m=None, name=None):
         return
     for app in ui.apps():
         if app.name == full:
-            app.focus()
-            # TODO: replace sleep with a check to see when it is in foreground
-            time.sleep(0.25)
-            break
+            return app
 
 
-def launch_app(m):
-    name = str(m["switcher.launch"][0])
+def switch_app(m=None, name=None):
+    app = lookup_app(m=m, name=name)
+    app.focus()
+    print(dir(app))
+    # TODO: replace sleep with a check to see when it is in foreground
+    time.sleep(0.25)
+
+
+def launch_app(m=None, name=None):
+    if m:
+        name = str(m["switcher.launch"][0])
+    elif not name:
+        raise ValueError("must provide name or m")
+
     path = launch.get(name)
     if path:
         ui.launch(path=path)
@@ -36,19 +47,11 @@ ctx.keymap(
         "launch {switcher.launch}": launch_app,
         # custom switchers here
         "madam": lambda x: switch_app(x, "Atom"),
-        "tony": lambda x: switch_app(x, "Oni"),
-        "matthew": lambda x: switch_app(x, "Mathematica"),
-        "fox (chrome | web)": lambda x: switch_app(x, "Google Chrome"),
-        # "fox outlook": lambda x: switch_app(x, "Outlook"),
-        # "fox slack": lambda x: switch_app(x, "Slack"),
-        # "fox iterm": lambda x: switch_app(x, "iTerm2"),
-        # "fox (term | terminal)": lambda x: switch_app(x, "Terminal"),
-        # "fox skype": lambda x: switch_app(x, "Skype"),
-        # "fox skype": lambda x: switch_app(x, "Skype for Business"),
-        # "fox signal": lambda x: switch_app(x, "Signal"),
-        # "(system preferences | sispref)": lambda x: launch_app(x, "System Preferences"), # doesn't work for some reason...
+        "system preferences": lambda x: switch_app(x, "System Preferences"),
     }
 )
+
+hardcoded_application_names = {"term": "iTerm2", "ink": "Inkdrop"}
 
 
 def update_lists():
@@ -64,6 +67,7 @@ def update_lists():
                 new[word] = app.name
         new[app.name] = app.name
     running = new
+    running.update(hardcoded_application_names)
     ctx.set_list("running", running.keys())
 
     new = {}

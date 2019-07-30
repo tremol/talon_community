@@ -8,11 +8,6 @@ ctx = Context("general_lang")
 
 ctx.keymap(
     {
-        # File extensions
-        "dot pie": ".py",
-        "dot pipe": ".py",
-        "dot tech": ".tex",
-
         # Operators
         "(op equals | assign | equeft)": " = ",
         "(op (minus | subtract) | deminus)": " - ",
@@ -25,15 +20,15 @@ ctx.keymap(
         "([op] (times | multiply) (assign | equals) | star assign)": " *= ",
         "[op] divide (assign | equals)": " /= ",
         "[op] mod (assign | equals)": " %= ",
-        "(op colon (equals | assign))": " := ",
+        "(op colon (equals | assign) | coleek)": " := ",
         "(op | is) greater [than]": " > ",
         "(op | is) less [than]": " < ",
         "((op | is) equal [to] | longqual)": " == ",
         "((op | is) not equal [to] | banquall)": " != ",
         "((op | is) greater [than] or equal [to] | grayqual)": " >= ",
         "((op | is) less [than] or equal [to] | lessqual)": " <= ",
-        "([(op | is)] exactly (equal [to] | equals) | triple equals)": " === ", # trickle
-        "([(op | is)] not exactly (equal [to] | equals))": " !== ", # ranqual | nockle
+        "([(op | is)] exactly (equal [to] | equals) | triple equals | trickle)": " === ",
+        "([(op | is)] not exactly (equal [to] | equals) | ranqual | nockle)": " !== ",
         "(op (power | exponent) | to the power [of])": " ** ",
         "op and": " && ",
         "op or": " || ",
@@ -50,12 +45,13 @@ ctx.keymap(
         "[op] (arrow | lambo)": " -> ",
         "[op] fat (arrow | lambo)": " => ",
         # Completed matchables
-        "(empty parens | call)": "()",
+        "(empty parens | call | prexy)": "()",
         "empty (dict | object)": "{}",
         "(empty array | brackers)": "[]",
         # Blocks
         "[brace] block": [" {}", Key("left enter enter up tab")],
-        "(square | brax) block": ["[", Key("enter")],
+        "[brace] shocker block": [Key("cmd-right enter"), "{}", Key("enter up right enter tab")],
+         "(square | brax) block": ["[", Key("enter")],
         "(paren | prex) block": ["(", Key("enter")],
         # Combos
         "coalshock": [":", Key("enter")],
@@ -66,20 +62,20 @@ ctx.keymap(
         "[forward] slasher": "// ",
         # Statements
         "state (def | deaf | deft)": "def ",
-        "state if": "if ",
+        "state if": ["if ()", Key("left")],
         "state else if": [" else if ()", Key("left")],
         "state while": ["while ()", Key("left")],
-        "state for": "for ",
+        "state for": ["for ()", Key("left")],
         "state switch": ["switch ()", Key("left")],
         "state case": ["case \nbreak;", Key("up")],
         # Other Keywords
-        # "const": "const ",
-        # "static": "static ",
-        # "tip pent": "int ",
-        # "tip char": "char ",
-        # "tip byte": "byte ",
-        # "tip float": "float ",
-        # "tip double": "double ",
+        "const": "const ",
+        "static": "static ",
+        "tip pent": "int ",
+        "tip (char | care)": "char ",
+        "tip byte": "byte ",
+        "tip float": "float ",
+        "tip double": "double ",
         # Comments
         "comment see": "// ",
         "comment py": "# ",

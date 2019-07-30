@@ -19,12 +19,7 @@ EDITOR_BUNDLES = (
     "com.google.android.studio",
 )
 
-# try saying: copy active bundle
 BROWSER_BUNDLES = ("org.mozilla.firefox", "com.google.Chrome")
-
-VIM_BUNDLES = ("com.extropy.oni",
-# "com.microsoft.VSCode",
-"org.vim.MacVim")
 
 FILETYPE_SENSITIVE_BUNDLES = (
     # *BROWSER_BUNDLES,

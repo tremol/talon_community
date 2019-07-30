@@ -4,6 +4,8 @@ from talon import ui
 from talon.voice import Context
 
 from ..config import config
+from .. import utils
+from . import switcher
 
 """Provides a voice-driven window management application implemented in Talon.
 
@@ -21,11 +23,18 @@ def sorted_screens():
     return sorted(ui.screens(), key=lambda screen: screen.visible_rect.left)
 
 
-def move_screen(off):
-    win = ui.active_window()
+def move_screen(off=None, screen_number=None, win=None):
+    if win is None:
+        win = ui.active_window()
+
     src_screen = win.screen
     screens = sorted_screens()
-    dst_screen = screens[(screens.index(src_screen) + off) % len(screens)]
+    if screen_number is None:
+        screen_number = (screens.index(src_screen) + off) % len(screens)
+    else:
+        screen_number -= 1
+
+    dst_screen = screens[screen_number]
     if src_screen == dst_screen:
         return
 
@@ -60,9 +69,6 @@ def resize_window(x, y, w, h):
     rect.y += rect.height * y
     rect.width *= w
     rect.height *= h
-    global avoid_bottom
-    if avoid_bottom:
-        rect.height -= 20
     win.rect = rect
 
 
@@ -113,40 +119,36 @@ def previous_screen(m):
     move_screen(-1)
 
 
-avoid_bottom = True
+def window_move_screen(m):
+    move_screen(screen_number=utils.extract_num_from_m(m))
 
-# def toggle_avoid_bottom(m):
-#     global avoid_bottom
-#     avoid_bottom = not avoid_bottom
 
-def avoid_bottom_on(m):
-    global avoid_bottom
-    avoid_bottom = True
+def window_move_application_screen(m):
+    move_screen(
+        screen_number=utils.extract_num_from_m(m),
+        win=switcher.lookup_app(m).active_window,
+    )
 
-def avoid_bottom_off(m):
-    global avoid_bottom
-    avoid_bottom = False
-
-#TODO: autodetect application and apply avoid bottom or not
 
 ctx = Context("window_management")
 ctx.keymap(
     {
-        # "(toggle avoid bottom | avoid bottom (on | off))": toggle_avoid_bottom,
-        "avoid bottom on": avoid_bottom_on,
-        "avoid bottom off": avoid_bottom_off,
-        "(snap | window) left": grid(1, 1, 2, 1),
-        "(snap | window) right": grid(2, 1, 2, 1),
+        "snap left": grid(1, 1, 2, 1),
+        "snap right": grid(2, 1, 2, 1),
         "snap top": grid(1, 1, 1, 2),
         "snap bottom": grid(1, 2, 1, 2),
-        "snap (top | upper) left": grid(1, 1, 2, 2),
-        "snap (top | upper) right": grid(2, 1, 2, 2),
-        "snap (bottom | lower) left": grid(1, 2, 2, 2),
-        "snap (bottom | lower) right": grid(2, 2, 2, 2),
-        "(snap screen | window max)": grid(1, 1, 1, 1),
+        "snap top left": grid(1, 1, 2, 2),
+        "snap top right": grid(2, 1, 2, 2),
+        "snap bottom left": grid(1, 2, 2, 2),
+        "snap bottom right": grid(2, 2, 2, 2),
+        "snap (screen | window)": grid(1, 1, 1, 1),
+        "snap center": grid(2, 2, 8, 8, 6, 6),
         "snap next": next_screen,
         "snap last": previous_screen,
-        "window next screen": next_screen,
-        "window preev screen": previous_screen,
+        "window [move] next screen": next_screen,
+        "window [move] preev screen": previous_screen,
+        "window [move] screen" + utils.numerals: window_move_screen,
+        "[window] [move] {switcher.running} [to] screen "
+        + utils.numerals: window_move_application_screen,
     }
 )

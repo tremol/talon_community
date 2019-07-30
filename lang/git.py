@@ -1,8 +1,6 @@
 from talon.voice import Context, Key
 
-from ..utils import text, is_in_bundles
-from ..bundle_groups import TERMINAL_BUNDLES
-
+from ..utils import text
 
 PREFIX = "jet "
 
@@ -10,8 +8,7 @@ PREFIX = "jet "
 # git may need to be used outside of the terminal, such as in a browser
 # terminal, or you may need to send git commands to your friends to help them
 # out with their git troubles.
-# ctx = Context("git")
-ctx = Context("git", func=is_in_bundles(TERMINAL_BUNDLES))
+ctx = Context("git")
 
 ctx.keymap(
     {
@@ -25,7 +22,8 @@ ctx.keymap(
         PREFIX + "add partial [<dgndictation>]": ["git add -p ", text],
         PREFIX + "bisect": "git bisect ",
         PREFIX + "branch": "git branch ",
-        PREFIX + "branch set up stream to [<dgndictation>]": [
+        PREFIX
+        + "branch set up stream to [<dgndictation>]": [
             "git branch --set-upstream-to=",
             text,
         ],
@@ -37,15 +35,20 @@ ctx.keymap(
         PREFIX + "checkout branch [<dgndictation>]": ["git checkout -B ", text],
         PREFIX + "cherry pick [<dgndictation>]": ["git cherry-pick ", text],
         PREFIX + "commit [<dgndictation>]": ['git commit -m ""', Key("left"), text],
-        PREFIX + "commit amend [<dgndictation>]": [
+        PREFIX
+        + "commit amend [<dgndictation>]": [
             'git commit --amend -m ""',
             Key("left"),
             text,
         ],
-        PREFIX + "commit all [<dgndictation>]": ['git commit -a -m ""', Key("left"), text],
+        PREFIX
+        + "commit all [<dgndictation>]": ['git commit -a -m ""', Key("left"), text],
+        PREFIX
+        + "commit ticket [number]": ['git commit -m "[#]"', Key("left"), Key("left")],
         PREFIX + "config [<dgndictation>]": ["git config ", text],
         PREFIX + "config list [<dgndictation>]": ["git config --list ", text],
         PREFIX + "diff [<dgndictation>]": ["git diff ", text],
+        PREFIX + "diff staged": "git diff --staged ",
         PREFIX + "fetch": "git fetch ",
         PREFIX + "history": "git hist ",
         PREFIX + "grep": "git grep ",
@@ -54,17 +57,21 @@ ctx.keymap(
         PREFIX + "merge [<dgndictation>]": ["git merge ", text],
         PREFIX + "move [<dgndictation>]": ["git mv ", text],
         PREFIX + "pull [<dgndictation>]": ["git pull ", text],
-        PREFIX + "pull (base | re-base | rebase | re base) [<dgndictation>]": [
+        PREFIX
+        + "pull (base | re-base | rebase | re base) [<dgndictation>]": [
             "git pull --rebase ",
             text,
         ],
         PREFIX + "push [<dgndictation>]": ["git push ", text],
         PREFIX + "push force [<dgndictation>]": ["git push --force ", text],
-        PREFIX + "push force lease [<dgndictation>]": ["git push --force-with-lease ", text],
-        PREFIX + "push set up stream [<dgndictation>]": ["git push --set-upstream ", text],
+        PREFIX
+        + "push force lease [<dgndictation>]": ["git push --force-with-lease ", text],
+        PREFIX
+        + "push set up stream [<dgndictation>]": ["git push --set-upstream ", text],
         PREFIX + "push set up new branch": "git push --set-upstream origin HEAD",
         PREFIX + "rebase continue": "git rebase --continue",
         PREFIX + "rebase [<dgndictation>]": ["git rebase ", text],
+        PREFIX + "remote add [<dgndictation>]": ["git remote add ", text],
         PREFIX + "(remove | R M) [<dgndictation>]": ["git rm ", text],
         PREFIX + "reset [<dgndictation>]": ["git reset ", text],
         PREFIX + "reset hard": "git reset --hard ",
@@ -74,6 +81,11 @@ ctx.keymap(
         PREFIX + "stash apply": "git stash apply ",
         PREFIX + "stash pop": "git stash pop ",
         PREFIX + "status": "git status ",
+        PREFIX + "submodule": "git submodule ",
+        PREFIX + "submodule add": "git submodule add ",
+        PREFIX + "submodule in it": "git submodule init",
+        PREFIX + "submodule update": "git submodule update",
         PREFIX + "tag": "git tag ",
+        PREFIX + "add commit": ["git add  && git commit"] + ([Key("left")] * 14),
     }
 )

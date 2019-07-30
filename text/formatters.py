@@ -11,8 +11,6 @@ from ..utils import (
     word,
     parse_words,
     spoken_text,
-    is_not_vim,
-    is_vim,
 )
 
 
@@ -25,10 +23,11 @@ def title_case_capitalize_word(index, word, _):
     else:
         return word
 
+
 formatters = normalise_keys(
     {
-        "thrack": (True, lambda i, word, _: word[0:3] if i == 0 else ""),
-        "quattro": (True, lambda i, word, _: word[0:4] if i == 0 else ""),
+        "tree": (True, lambda i, word, _: word[0:3] if i == 0 else ""),
+        "quad": (True, lambda i, word, _: word[0:4] if i == 0 else ""),
         "(cram | camel)": (
             True,
             lambda i, word, _: word if i == 0 else word.capitalize(),
@@ -45,7 +44,7 @@ formatters = normalise_keys(
             True,
             lambda i, word, _: "$" + word if i == 0 else word.capitalize(),
         ),
-        "champ": (False, lambda i, word, _: word.capitalize() if i == 0 else word),
+        "champ": (True, lambda i, word, _: word.capitalize() if i == 0 else " " + word),
         "lowcram": (
             True,
             lambda i, word, _: "@" + word if i == 0 else word.capitalize(),
@@ -54,8 +53,8 @@ formatters = normalise_keys(
         "tridal": (False, lambda i, word, _: word.capitalize()),
         "snake": (True, lambda i, word, _: word if i == 0 else "_" + word),
         "dotsnik": (True, lambda i, word, _: "." + word if i == 0 else "_" + word),
-        "smash": (True, lambda i, word, _: word.lower()), # remove spaces and lowercase everything
-        "lowercase": (False, lambda i, word, _: word.lower()), # lowercase everything, keeping spaces
+        "dot": (True, lambda i, word, _: "." + word if i == 0 else "_" + word),
+        "smash": (True, lambda i, word, _: word),
         "(spine | kebab)": (True, lambda i, word, _: word if i == 0 else "-" + word),
         "title": (False, title_case_capitalize_word),
     }
@@ -66,10 +65,10 @@ surrounders = normalise_keys(
         "(dubstring | coif)": (False, surround('"')),
         "(string | posh)": (False, surround("'")),
         "(tics | glitch)": (False, surround("`")),
-        "(padded | prank)": (False, surround(" ")),
+        "padded": (False, surround(" ")),
         "dunder": (False, surround("__")),
         "angler": (False, surround("<", ">")),
-        "brisk": (False, surround("[", "]")),
+        "brax": (False, surround("[", "]")),
         "kirk": (False, surround("{", "}")),
         "precoif": (False, surround('("', '")')),
         "(prex | args)": (False, surround("(", ")")),
@@ -79,29 +78,26 @@ surrounders = normalise_keys(
 formatters.update(surrounders)
 
 
-def FormatText(m, vim=False):
+def FormatText(m):
     fmt = []
 
     for w in m._words:
         if isinstance(w, Word) and w != "over":
             fmt.append(w.word)
-    words = parse_words(m, True) # add True so champ preserves natural capitalization
+    words = parse_words(m)
     if not words:
-        if not vim:
-            try:
-                with clip.capture() as s:
-                    press("cmd-c")
-                words = s.get().split(" ")
-            except clip.NoChange:
-                words = [""]
-        else:
+        try:
+            with clip.capture() as s:
+                press("cmd-c")
+            words = s.get().split(" ")
+        except clip.NoChange:
             words = [""]
 
     tmp = []
 
     smash = False
     for i, w in enumerate(words):
-        word = parse_word(w, False) # change to False so champ preserves natural capitalization
+        word = parse_word(w, True)
         for name in reversed(fmt):
             smash, func = formatters[name]
             word = func(i, word, i == len(words) - 1)
@@ -114,32 +110,18 @@ def FormatText(m, vim=False):
         for i in range(len(tmp[0]) // 2):
             press("left")
 
-universal_formatters_keymap = {
-        "(phrase) <dgndictation> [over]": spoken_text, # changed from text to spoken_text for natural capitalization
+
+ctx = Context("formatters")
+
+ctx.keymap(
+    {
+        "(phrase | say) <dgndictation> [over]": text,
         "sentence <dgndictation> [over]": sentence_text,
         "(comma | ,) <dgndictation> [over]": [", ", spoken_text],
         "period <dgndictation> [over]": [". ", sentence_text],
         "word <dgnwords>": word,
-}
-
-ctx = Context("formatters-no_vim", func=is_not_vim)
-
-ctx.keymap(
-    {
-        **universal_formatters_keymap,
         "(%s)+ [<dgndictation>] [over]" % (" | ".join(formatters)): FormatText,
         # to match surrounder command + another command (i.e. not dgndictation)
         "(%s)+" % (" | ".join(surrounders)): FormatText,
-    }
-)
-
-ctx = Context("formatters-vim", func=is_vim)
-
-ctx.keymap(
-    {
-        **universal_formatters_keymap,
-        "(%s)+ [<dgndictation>] [over]" % (" | ".join(formatters)): lambda m: FormatText(m, vim=True),
-        # to match surrounder command + another command (i.e. not dgndictation)
-        "(%s)+" % (" | ".join(surrounders)): lambda m: FormatText(m, vim=True),
     }
 )

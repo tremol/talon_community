@@ -1,8 +1,14 @@
 from talon.voice import Context, press, Key
 import string
 from ..utils import normalise_keys, insert
+from ..config import config
 
-alpha_alt = "air bat cap drum each fine gus harp sit jury crunch look made near odd pit quench red sun trap urge vess whale plex yank zoo".split()
+# Alphabet words are configurable in your config.json.  default is talon_alphabet_words:
+talon_alphabet_words = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip"
+# voicecode_alphabet_words: "arch brov char dell etch fomp goof hark ice jinx koop lug mowsh nerb ork pooch quosh rosh sun teak unks verge womp trex yang zooch"
+
+alpha_alt = config.get("alphabet_words", talon_alphabet_words).split()
+
 alphabet = dict(zip(alpha_alt, string.ascii_lowercase))
 
 f_keys = {f"F {i}": f"f{i}" for i in range(1, 13)}
@@ -22,7 +28,7 @@ simple_keys = normalise_keys(
         "home": "home",
         "pagedown": "pagedown",
         "pageup": "pageup",
-        "go to end": "end",
+        "end": "end",
     }
 )
 
@@ -34,13 +40,13 @@ symbols = normalise_keys(
         # ``text/symbol.py``.
         "(tick | back tick)": "`",
         "(comma | ,)": ",",
-        "(dot | period | point)": ".",
+        "(dot | period)": ".",
         "(semicolon | semi)": ";",
-        "(quote | quatchet | prime)": "'",
+        "(quote | quatchet)": "'",
         "(square | L square | left square | left square bracket)": "[",
         "(R square | right square | right square bracket)": "]",
         "(slash | forward slash)": "/",
-        "(backslash | shalls)": "\\",
+        "backslash": "\\",
         "(minus | dash)": "-",
         "(equals | smaqual)": "=",
     }
@@ -51,7 +57,7 @@ modifiers = normalise_keys(
         "command": "cmd",
         "(control | troll)": "ctrl",
         "(shift | sky)": "shift",
-        "(option)": "alt",
+        "(alt | option)": "alt",
     }
 )
 
@@ -98,10 +104,6 @@ def get_keys(m):
 def uppercase_letters(m):
     insert("".join(get_keys(m)).upper())
 
-def first_uppercase(m):
-    letters = get_keys(m)
-    to_insert = letters[0].upper() + ''.join(letters[1:])
-    insert(to_insert)
 
 def press_keys(m):
     mods = get_modifiers(m)
@@ -120,9 +122,7 @@ def press_keys(m):
 ctx = Context("basic_keys")
 ctx.keymap(
     {
-        '(boo | ship | sky) {basic_keys.alphabet}+': first_uppercase,
-        'uppercase {basic_keys.alphabet}+ [(lowercase | sunk)]': uppercase_letters,
-        # "(uppercase | ship | sky) {basic_keys.alphabet}+ [(lowercase | sunk)]": uppercase_letters,
+        "(uppercase | ship | sky) {basic_keys.alphabet}+ [(lowercase | lower | sunk)]": uppercase_letters,
         "{basic_keys.modifiers}* {basic_keys.alphabet}+": press_keys,
         "{basic_keys.modifiers}* {basic_keys.digits}+": press_keys,
         "{basic_keys.modifiers}* {basic_keys.keys}+": press_keys,
