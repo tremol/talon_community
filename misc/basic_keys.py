@@ -15,12 +15,12 @@ f_keys = {f"F {i}": f"f{i}" for i in range(1, 13)}
 
 simple_keys = normalise_keys(
     {
-        "(crimp | lloyd)": "left",
+        "crimp": "left",
         "chris": "right",
         "jeep": "up",
         "( dune | doom )": "down",
         "( backspace | junk )": "backspace",
-        "(delete | forward delete | scrap | spunk)": "delete",
+        "(delete | forward delete | spunk)": "delete",
         "(space | skoosh)": "space",
         "(tab | tarp)": "tab",
         "( enter | shock )": "enter",
@@ -28,7 +28,7 @@ simple_keys = normalise_keys(
         "home": "home",
         "pagedown": "pagedown",
         "pageup": "pageup",
-        "end": "end",
+        "go to end": "end",
     }
 )
 
@@ -40,13 +40,13 @@ symbols = normalise_keys(
         # ``text/symbol.py``.
         "(tick | back tick)": "`",
         "(comma | ,)": ",",
-        "(dot | period)": ".",
+        "(dot | period | point)": ".",
         "(semicolon | semi)": ";",
-        "(quote | quatchet)": "'",
-        "(square | L square | left square | left square bracket)": "[",
-        "(R square | right square | right square bracket)": "]",
+        "prime": "'",
+        "(square | L square | left square | left square bracket | bracket)": "[",
+        "(R square | right square | right square bracket | R bracket)": "]",
         "(slash | forward slash)": "/",
-        "backslash": "\\",
+        "(backslash | leader)": "\\",
         "(minus | dash)": "-",
         "(equals | smaqual)": "=",
     }
@@ -57,7 +57,7 @@ modifiers = normalise_keys(
         "command": "cmd",
         "(control | troll)": "ctrl",
         "(shift | sky)": "shift",
-        "(alt | option)": "alt",
+        "option": "alt",
     }
 )
 
@@ -122,14 +122,15 @@ def press_keys(m):
 ctx = Context("basic_keys")
 ctx.keymap(
     {
-        "(uppercase | ship | sky) {basic_keys.alphabet}+ [(lowercase | lower | sunk)]": uppercase_letters,
+        "uppercase {basic_keys.alphabet}+ [(lowercase | lower | sunk)]": uppercase_letters,
+        "(ship | sky) {basic_keys.alphabet}": uppercase_letters,
         "{basic_keys.modifiers}* {basic_keys.alphabet}+": press_keys,
         "{basic_keys.modifiers}* {basic_keys.digits}+": press_keys,
         "{basic_keys.modifiers}* {basic_keys.keys}+": press_keys,
         "(go | {basic_keys.modifiers}+) {basic_keys.arrows}+": press_keys,
         "number {basic_keys.digits}+ [over]": press_keys,
         "tarsh": Key("shift-tab"),
-        "tarpy": [Key("tab"), Key("tab")],
+        # "tarpy": [Key("tab"), Key("tab")],
     }
 )
 ctx.set_list("alphabet", alphabet.keys())
