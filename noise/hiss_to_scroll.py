@@ -1,13 +1,12 @@
 from talon import ctrl, app
 from talon.audio import noise
-from ..misc import mouse
-from ..misc import switcher
+from ..misc import continuous_scroll
 
 class config:
     enabled = False
-    default_scroll_rate = 20
+    default_scroll_rate = 13
     multiplier = 3
-    scroll_rate = 20
+    scroll_rate = default_scroll_rate 
 
 def toggle_enabled(m):
     config.enabled = not config.enabled
@@ -39,14 +38,14 @@ class NoiseModel:
         noise.register('noise', self.on_noise)
 
     def on_noise(self, noise):
+        print("noise")
         if noise == 'hiss_start':
             if config.enabled:
-                mouse.stopScrolling(None)
-                mouse.mouse_scroll(config.scroll_rate)(None)
-                mouse.startScrolling(None)
+                continuous_scroll.stopScrolling(None)
+                continuous_scroll.startScrolling(config.scroll_rate)(None)
         elif noise == 'hiss_end':
             if config.enabled:
-                mouse.stopScrolling(None)
+                continuous_scroll.stopScrolling(None)
 
 
 model = NoiseModel()
@@ -73,5 +72,6 @@ ctx2.keymap(
         'reverse': reverse,
         'slower': adjust_speed(1/config.multiplier),
         'faster': adjust_speed(config.multiplier),
+        'default': set_speed(1),
     }
 )
