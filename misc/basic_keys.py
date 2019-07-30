@@ -2,7 +2,7 @@ from talon.voice import Context, press, Key
 import string
 from ..utils import normalise_keys, insert
 
-alpha_alt = "air bat cap drum each fine gust harp sit jury crunch look made near odd pit quench red sun trap urge vest whale plex yank zip".split()
+alpha_alt = "air bat cap drum each fine gus harp sit jury crunch look made near odd pit quench red sun trap urge vess whale plex yank zoo".split()
 alphabet = dict(zip(alpha_alt, string.ascii_lowercase))
 
 f_keys = {f"F {i}": f"f{i}" for i in range(1, 13)}
@@ -120,7 +120,7 @@ def press_keys(m):
 ctx = Context("basic_keys")
 ctx.keymap(
     {
-        '(ship | sky) {basic_keys.alphabet}+': first_uppercase,
+        '(boo | ship | sky) {basic_keys.alphabet}+': first_uppercase,
         'uppercase {basic_keys.alphabet}+ [(lowercase | sunk)]': uppercase_letters,
         # "(uppercase | ship | sky) {basic_keys.alphabet}+ [(lowercase | sunk)]": uppercase_letters,
         "{basic_keys.modifiers}* {basic_keys.alphabet}+": press_keys,

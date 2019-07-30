@@ -293,6 +293,10 @@ def is_in_bundles(bundles):
 
 
 def is_vim(app, win):
+    # print('----------')
+    # print(app)
+    # print(win)
+    # print(win.title)
     if is_in_bundles(TERMINAL_BUNDLES)(app, win):
         if VIM_IDENTIFIER in win.title:
             return True

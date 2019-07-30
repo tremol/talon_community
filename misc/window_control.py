@@ -24,14 +24,7 @@ common = {
         "([switch] app (next | right) | swick)": Key("cmd-tab"),
         "[switch] app (left | previous | preev)": Key("cmd-shift-tab"),
         "([open] mission control | mission)": lambda m: system("open -a 'Mission Control'"),
-}
-
-ctx_not_vim.keymap(
-    {
-        **common,
         # tab control
-        "(open | new) tab": Key("cmd-t"),
-        "(close tab | peachy)": Key("cmd-w"),
         "([switch] tab (right | next) | goneck)": Key("cmd-shift-]"),
         "([switch] tab (left | previous | preev) | gopreev)": Key("cmd-shift-["),
         "[switch] tab (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8)": jump_tab,
@@ -45,6 +38,14 @@ ctx_not_vim.keymap(
         "window close": Key("cmd-shift-w"),
         "([switch] window next | gibby)": Key("cmd-`"),
         "([switch] window (previous | preev) | shibby)": Key("cmd-shift-`"),
+}
+
+ctx_not_vim.keymap(
+    {
+        **common,
+        # tab control
+        "(open | new) tab": Key("cmd-t"),
+        "(close tab | peachy)": Key("cmd-w"),
     }
 )
 
@@ -54,18 +55,5 @@ ctx_vim.keymap(
         # tab control
         "(open | new) tab": [Key('escape'), ":tabnew", Key('enter')],
         "(close tab | peachy)": [Key('escape'), ":q", Key('enter')],
-        "([switch] tab (right | next) | goneck)": Key("cmd-shift-]"),
-        "([switch] tab (left | previous | preev) | gopreev)": Key("cmd-shift-["),
-        "[switch] tab (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8)": jump_tab,
-        "[switch] tab (end | rightmost)": Key("cmd-9"),
-        # zooming
-        "(zoom in | shompla)": Key("cmd-="),
-        "(zoom out | shaman)": Key("cmd--"),
-        "zoom normal": Key("cmd-0"),
-        # window control
-        "(open | new) window": Key("cmd-n"),
-        "window close": Key("cmd-shift-w"),
-        "([switch] window next | gibby)": Key("cmd-`"),
-        "([switch] window (previous | preev) | shibby)": Key("cmd-shift-`"),
     }
 )

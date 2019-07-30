@@ -1,6 +1,7 @@
 from talon.voice import Context, ContextGroup
 from talon.engine import engine
 from talon_plugins import speech
+from talon_plugins import eye_mouse
 
 sleep_group = ContextGroup("sleepy")
 sleepy = Context("sleepy", group=sleep_group)
@@ -57,6 +58,7 @@ sleepy.keymap(
         "dragon mode": lambda m: set_voice_type(VoiceType.DRAGON),
         "dictation mode": lambda m: set_voice_type(VoiceType.DICTATION),
         "talon mode": lambda m: set_voice_type(VoiceType.TALON),
+        "Scooby Doo": lambda m: eye_mouse.control_mouse.toggle(),
     }
 )
 sleep_group.load()

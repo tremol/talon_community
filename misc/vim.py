@@ -16,14 +16,20 @@ end tell
 
 ctx.keymap({
 	"(venom total quit | venom quit yes really | exit application oni)": quit_oni,
-	"(vim | venom) save quit": Key("esc : w q enter"),
-	"(vim save | sage)": Key("esc : w enter"),
-	# "(vim quit | peachy)": Key("esc : q"), # implemented in window_control
-	"(venom force quit)": Key("esc : q !"), #  | vim quit bang
+	"(vim | venom) save quit": Key(": w q enter"),
+	"(vim save | sage)": Key(": w enter"),
+	"vim quit": Key(": q enter"), # implemented in window_control
+	"(vim | venom) force quit": Key(": q !"), #  | vim quit bang
 	"(vim | venom) help": [Key('escape'), ":help "],
 	"marco": Key('/'),
 	"dizzle": Key('u'),
 	"rizzle": Key('ctrl-r'),
+	"(trough | window)": Key('ctrl-w'),
+	"spark": Key('cmd-v'),
+
+	# vundle
+	"plugin install": ":PluginInstall",
+	"plugin update": ":PluginUpdate",
 
 	# commentary.vim
 	"trundle": Key('g c c'),

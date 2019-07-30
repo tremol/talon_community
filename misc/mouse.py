@@ -1,10 +1,8 @@
-# from https://github.com/talonvoice/examples
-# jsc added shift-click, command-click, and voice code compatibility
-
-# import eye
 import time
-from talon import ctrl, tap
+
+from talon import cron, ctrl, tap
 from talon.voice import Context
+from talon_plugins import eye_mouse, eye_zoom_mouse
 
 ctx = Context("mouse")
 
@@ -13,54 +11,51 @@ mouse_history = [(x, y, time.time())]
 force_move = None
 
 
-def on_move(typ, e):
-    mouse_history.append((e.x, e.y, time.time()))
+def on_move(_, e):
+    time_ = (e.x, e.y, time.time())
+    # print(time_)
+    mouse_history.append(time_)
     if force_move:
         e.x, e.y = force_move
         return True
+    return False
 
 
 tap.register(tap.MMOVE, on_move)
 
 
-def click_pos(m):
+# noinspection PyProtectedMember
+def click_pos(m, from_end=False):
     word = m._words[0]
-    start = (word.start + min((word.end - word.start) / 2, 0.100)) / 1000.0
-    diff, pos = min([(abs(start - pos[2]), pos) for pos in mouse_history])
-    return pos[:2]
+    if from_end:
+        word = m._words[-1]
+    # print(f"word is {word} {word.start} {word.end}")
+    # start = (word.start + min((word.end - word.start) / 2, 0.100)) / 1000.0
+    word_time = word.end / 1000.0
+    # if from_end:
+    #     word_time = word.end / 1000.0
+    # print(f"word start is {word_time}, now is {time.time()}")
+    for pos in reversed(mouse_history):
+        if pos[2] < word_time:
+            # print(f"pos is {pos}")
+            return pos[:2]
+    return mouse_history[-1][:2]
 
 
-def delayed_click(m, button=0, times=1):
-    # old = eye.config.control_mouse
-    # eye.config.control_mouse = False
-    # x, y = click_pos(m)
-    # ctrl.mouse(x, y)
+def delayed_click(m, button=0, times=1, from_end=False, mods=None):
+    if mods is None:
+        mods = []
+    old = eye_mouse.config.control_mouse
+    eye_mouse.config.control_mouse = False
+    x, y = click_pos(m, from_end=from_end)
+    ctrl.mouse(x, y)
+    for key in mods:
+        ctrl.key_press(key, down=True)
     ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
-    # time.sleep(0.032)
-    # eye.config.control_mouse = old
-
-
-# jsc added
-def press_key_and_click(m, key, button=0, times=1):
-    ctrl.key_press(key, down=True)
-    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
-    ctrl.key_press(key, up=True)
-
-
-# jsc added
-def shift_click(m, button=0, times=1):
-    press_key_and_click(m, "shift", button, times)
-
-
-def command_click(m, button=0, times=1):
-    press_key_and_click(m, "cmd", button, times)
-
-
-def command_shift_click(m, button=0, times=1):
-    ctrl.key_press("cmd", cmd=True, shift=True, down=True)
-    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
-    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
-    ctrl.key_press("cmd", cmd=True, shift=True, up=True)
+    for key in mods[::-1]:
+        ctrl.key_press(key, up=True)
+    time.sleep(0.032)
+    eye_mouse.config.control_mouse = old
 
 
 def delayed_right_click(m):
@@ -75,13 +70,6 @@ def delayed_tripclick(m):
     delayed_click(m, button=0, times=3)
 
 
-def mouse_scroll(amount):
-    def scroll(m):
-        ctrl.mouse_scroll(y=amount)
-
-    return scroll
-
-
 def mouse_drag(m):
     x, y = click_pos(m)
     ctrl.mouse_click(x, y, down=True)
@@ -91,24 +79,134 @@ def mouse_release(m):
     x, y = click_pos(m)
     ctrl.mouse_click(x, y, up=True)
 
-# smooth scrolling?
-# mouse_scroll(by_lines=False, y=blah)
+
+def mouse_scroll(amount):
+    def scroll(m):
+        global scrollAmount
+        # print("amount is", amount)
+        if (scrollAmount >= 0) == (amount >= 0):
+            scrollAmount += amount
+        else:
+            scrollAmount = amount
+        ctrl.mouse_scroll(y=amount)
+
+    return scroll
+
+
+def adv_click(button, *mods, **kwargs):
+    def click(e):
+        for key in mods:
+            ctrl.key_press(key, down=True)
+        delayed_click(e)
+        for key in mods[::-1]:
+            ctrl.key_press(key, up=True)
+
+    return click
+
+
+def control_mouse(m):
+    ctrl.mouse(10, 10)
+    eye_mouse.control_mouse.toggle()
+    if eye_zoom_mouse.zoom_mouse.enabled:
+        eye_zoom_mouse.zoom_mouse.enable()
+
+
+def control_zoom_mouse(m):
+    ctrl.mouse(10, 10)
+    if eye_zoom_mouse.zoom_mouse.enabled:
+        eye_zoom_mouse.zoom_mouse.disable()
+    else:
+        eye_zoom_mouse.zoom_mouse.enable()
+
+    eye_zoom_mouse.zoom_mouse.toggle()
+    if eye_mouse.control_mouse.enabled:
+        eye_mouse.control_mouse.toggle()
+
+
+clickJob = None
+
+
+def click_me():
+    ctrl.mouse_click(button=0)
+
+
+def startClicking(m):
+    global clickJob
+    clickJob = cron.interval("60ms", click_me)
+
+
+def stopClicking(m):
+    global clickJob
+    cron.cancel(clickJob)
+
+
+def scrollMe():
+    global scrollAmount
+    if scrollAmount:
+        ctrl.mouse_scroll(by_lines=False, y=scrollAmount)
+
+
+def startScrolling(m):
+    global scrollJob
+    scrollJob = cron.interval("20ms", scrollMe)
+
+
+def stopScrolling(m):
+    global scrollAmount, scrollJob
+    scrollAmount = 0
+    cron.cancel(scrollJob)
+
+
+scrollAmount = 0
+scrollJob = None
+
+hideJob = None
+
+
+def toggle_cursor(show):
+    def _toggle(_):
+        global hideJob
+        ctrl.cursor_visible(show)
+        if show:
+            cron.cancel(hideJob)
+        else:
+            hideJob = cron.interval("500ms", lambda: ctrl.cursor_visible(show))
+
+    return _toggle
+
 
 keymap = {
-    # jsc modified with some voice-code compatibility
-    "(righty)": delayed_right_click,
-    "(chaff)": delayed_click,
-    # "(click | chiff)": delayed_click,
-    "(dubclick | duke)": delayed_dubclick,
-    "(tripclick)": delayed_tripclick, # triplick
-    "drag": mouse_drag,
-    "release": mouse_release,
-    # jsc added
-    "(shift click | shicks)": shift_click,
-    "(command click | chom lick)": command_click,
-    "(command shift click | sync tech)": command_shift_click,
-    "(wheel down | scrodge)": mouse_scroll(400),
-    "(wheel up | scroop)": mouse_scroll(-400),
+    "hide cursor": toggle_cursor(False),
+    "show cursor": toggle_cursor(True),
+    # "debug overlay": lambda m: eye.on_menu("Eye Tracking >> Show Debug Overlay"),
+    "(gaze | control mouse)": control_mouse,
+    "zoom mouse": control_zoom_mouse,
+    # "camera overlay": lambda m: eye.on_menu("Eye Tracking >> Show Camera Overlay"),
 }
 
+click_keymap = {
+    "(click | chaff)": delayed_click,
+    "(right click | righty)": delayed_right_click,
+    "(double click | duke)": delayed_dubclick,
+    "triple click": delayed_tripclick,
+    "drag [click]": mouse_drag,
+    "release [click]": mouse_release,
+    "auto click": startClicking,
+    "stop click": stopClicking,
+    "(wheel down | scrodge)": mouse_scroll(400),
+    "wheel down continuous": [mouse_scroll(10), startScrolling],
+    "(wheel up | scroop)": mouse_scroll(-400),
+    "wheel up continuous": [mouse_scroll(-10), startScrolling],
+    "wheel stop": stopScrolling,
+    "command click": adv_click(0, "cmd"),
+    "control click": adv_click(0, "ctrl"),
+    "(option | opt) click": adv_click(0, "alt"),
+    "shift click": adv_click(0, "shift"),
+    "(shift alt | alt shift) click": adv_click(0, "alt", "shift"),
+    "(shift double | double shift) click": adv_click(0, "shift", times=2),
+}
+keymap.update(click_keymap)
+
 ctx.keymap(keymap)
+
+ctrl.cursor_visible(True)
