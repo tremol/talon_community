@@ -4,6 +4,7 @@ EDITOR_BUNDLES = (
     "com.microsoft.VSCode",
     "com.github.atom",
     "com.apple.TextEdit",
+    "org.vim.MacVim",
     # jetbrains
     "com.jetbrains.intellij",
     "com.jetbrains.intellij.ce",
@@ -20,6 +21,8 @@ EDITOR_BUNDLES = (
 )
 
 BROWSER_BUNDLES = ("org.mozilla.firefox", "com.google.Chrome")
+
+VIMGUI_BUNDLES = ("org.vim.MacVim",)
 
 FILETYPE_SENSITIVE_BUNDLES = (
     # *BROWSER_BUNDLES,

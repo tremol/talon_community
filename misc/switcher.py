@@ -46,7 +46,8 @@ ctx.keymap(
         "(focus | fox) {switcher.running}": switch_app,
         "launch {switcher.launch}": launch_app,
         # custom switchers here
-        "madam": lambda x: switch_app(x, "Atom"),
+        # "madam": lambda x: switch_app(x, "Atom"),
+        "fox web": lambda x: switch_app(x, "Chrome"),
         "system preferences": lambda x: switch_app(x, "System Preferences"),
     }
 )

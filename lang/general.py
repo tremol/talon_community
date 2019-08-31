@@ -45,11 +45,11 @@ ctx.keymap(
         "[op] (arrow | lambo)": " -> ",
         "[op] fat (arrow | lambo)": " => ",
         # Completed matchables
-        "(empty parens | call | prexy)": "()",
+        "(empty parens | prexy)": "()",
         "empty (dict | object)": "{}",
         "(empty array | brackers)": "[]",
         # Blocks
-        "[brace] block": [" {}", Key("left enter enter up tab")],
+        "brace block": [" {}", Key("left enter enter up tab")],
         "[brace] shocker block": [Key("cmd-right enter"), "{}", Key("enter up right enter tab")],
          "(square | brax) block": ["[", Key("enter")],
         "(paren | prex) block": ["(", Key("enter")],

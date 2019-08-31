@@ -165,12 +165,12 @@ context.keymap(
         "search {global_browser.searches} [<dgndictation>]": new_search_existing_tab,
         "close tab": Key("cmd-w"),
         "(reopen | unclose) tab": Key("cmd-shift-t"),
-        "(next tab | goneck)": Key("cmd-shift-]"),
+        "next tab": Key("cmd-shift-]"),
         "((last | previous | preev) tab | gopreev)": Key("cmd-shift-["),
         "tab (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8)": jump_tab,
         "(end | rightmost) tab": Key("cmd-9"),
         "marco": Key("cmd-f"),
-        "marneck": Key("cmd-g"),
+        # "marneck": Key("cmd-g"),
         "(last | prevous)": Key("cmd-shift-g"),
         "toggle dev tools": Key("cmd-alt-i"),
         "command menu": Key("cmd-shift-p"),
@@ -195,7 +195,7 @@ context.keymap(
         # "mendeley": Key("cmd-shift-m"),
         "(add | save) to mendeley": mendeley,
         # TODO: this should probably be specific to the page
-        "submit": Key("cmd-enter"),
+        # "submit": Key("cmd-enter"),
         # zotero
         "zotero": Key("cmd-shift-z"),
         # rearrange tabs: https://chrome.google.com/webstore/detail/rearrange-tabs/ccnnhhnmpoffieppjjkhdakcoejcpbga
@@ -203,7 +203,7 @@ context.keymap(
         # "move tab right": Key("ctrl-shift-right"),
         # "move tab left way": Key("ctrl-shift-down"),
         # vimium
-        "link": link,
+        # "link": link,
         "move tab left": browser.send_to_vimium("<<"),
         "move tab right": browser.send_to_vimium(">>"),
         "move tab new window": browser.send_to_vimium("W"),
@@ -216,6 +216,8 @@ context.keymap(
             Key("enter"),
         ],
         "open most recently downloaded file": open_most_recently_downloaded_file,
+        "toggle fullscreen": Key("ctrl-cmd-f"),
+        "toggle top matter": Key("cmd-shift-f"), # only matters when in fullscreen
     }
 )
 

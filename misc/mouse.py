@@ -90,6 +90,13 @@ def mouse_center(m):
     print(rect, center)
     ctrl.mouse_move(*center)
 
+def mouse_go_away(m):
+    win = ui.active_window()
+    rect = win.rect
+    center = (rect.x + rect.width * 0.95, rect.y + rect.height / 4)
+    print(rect, center)
+    ctrl.mouse_move(*center)
+
 
 def press_key_and_click(m, key, button=0, times=1):
     ctrl.key_press(key, down=True)
@@ -114,12 +121,12 @@ def control_shift_click(m, button=0, times=1):
 keymap = {
     # jsc modified with some voice-code compatibility
     "righty": delayed_right_click,
-    "(click | chiff)": delayed_click,
+    "click": delayed_click,
     "(dubclick | duke)": delayed_dubclick,
     "(tripclick | triplick)": delayed_tripclick,
     "drag": mouse_drag,
-    "drag release": mouse_release,
-    "(shift click | shicks)": shift_click,
+    "[drag] release": mouse_release,
+    "shift click": shift_click,
     "(command click | chom lick)": command_click,
     "(control shift click | troll shift click)" : control_shift_click,
     "(control shift double click | troll shift double click)" : lambda m: control_shift_click(m, 0, 2),
@@ -131,6 +138,7 @@ keymap = {
     "wheel down here": [mouse_center, mouse_scroll(200)],
     "wheel up here": [mouse_center, mouse_scroll(-200)],
     "mouse center": mouse_center,
+    "mouse away": mouse_go_away,
 }
 
 ctx.keymap(keymap)

@@ -8,7 +8,7 @@ from talon import clip, resource
 from talon.voice import Context, Str, press
 
 from . import vocab
-from .bundle_groups import FILETYPE_SENSITIVE_BUNDLES, TERMINAL_BUNDLES
+from .bundle_groups import FILETYPE_SENSITIVE_BUNDLES, TERMINAL_BUNDLES, VIMGUI_BUNDLES
 
 VIM_IDENTIFIER = "(Vim)"
 INCLUDE_TEENS_IN_NUMERALS = False
@@ -70,7 +70,7 @@ def remove_appostrophe_s(words):
         new_words = []
         for i, word in enumerate(words):
             if word == "'s":
-                new_words[-1] += "s"
+                new_words[-1] += "'s"
             else:
                 new_words.append(word)
         return new_words
@@ -344,6 +344,8 @@ def is_vim(app, win):
     if is_in_bundles(TERMINAL_BUNDLES)(app, win):
         if VIM_IDENTIFIER in win.title:
             return True
+    if is_in_bundles(VIMGUI_BUNDLES)(app, win):
+        return True
     return False
 
 

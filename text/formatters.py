@@ -26,8 +26,8 @@ def title_case_capitalize_word(index, word, _):
 
 formatters = normalise_keys(
     {
-        "tree": (True, lambda i, word, _: word[0:3] if i == 0 else ""),
-        "quad": (True, lambda i, word, _: word[0:4] if i == 0 else ""),
+        "thrack": (True, lambda i, word, _: word[0:3] if i == 0 else ""),
+        "quattro": (True, lambda i, word, _: word[0:4] if i == 0 else ""),
         "(cram | camel)": (
             True,
             lambda i, word, _: word if i == 0 else word.capitalize(),
@@ -44,7 +44,7 @@ formatters = normalise_keys(
             True,
             lambda i, word, _: "$" + word if i == 0 else word.capitalize(),
         ),
-        "champ": (True, lambda i, word, _: word.capitalize() if i == 0 else " " + word),
+        # "champ": (True, lambda i, word, _: word.capitalize() if i == 0 else " " + word),
         "lowcram": (
             True,
             lambda i, word, _: "@" + word if i == 0 else word.capitalize(),
@@ -65,13 +65,13 @@ surrounders = normalise_keys(
         "(dubstring | coif)": (False, surround('"')),
         "(string | posh)": (False, surround("'")),
         "(tics | glitch)": (False, surround("`")),
-        "padded": (False, surround(" ")),
+        "(padded | prank)": (False, surround(" ")),
         "dunder": (False, surround("__")),
         "angler": (False, surround("<", ">")),
-        "brax": (False, surround("[", "]")),
+        "brisk": (False, surround("[", "]")),
         "kirk": (False, surround("{", "}")),
         "precoif": (False, surround('("', '")')),
-        "(prex | args)": (False, surround("(", ")")),
+        "prex": (False, surround("(", ")")),
     }
 )
 
@@ -115,8 +115,10 @@ ctx = Context("formatters")
 
 ctx.keymap(
     {
-        "(phrase | say) <dgndictation> [over]": text,
-        "sentence <dgndictation> [over]": sentence_text,
+        "(phrase | say) <dgndictation> [over]": spoken_text,
+        "derek [<dgndictation>] [over]": [" ", spoken_text],
+        "squash <dgndictation> [over]": text,
+        "(sentence | champ) <dgndictation> [over]": sentence_text,
         "(comma | ,) <dgndictation> [over]": [", ", spoken_text],
         "period <dgndictation> [over]": [". ", sentence_text],
         "word <dgnwords>": word,

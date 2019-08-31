@@ -3,7 +3,7 @@ import string
 from talon.voice import Context, Key, Str, press
 from talon import clip
 
-from ..apps import atom
+# from ..apps import atom
 from ..misc import basic_keys
 from ..misc import switcher
 from ..utils import parse_words, text, is_filetype, paste_text, insert
@@ -51,10 +51,10 @@ def dragon_abbreviation(m):
     insert(" ".join(key.upper() for key in keys))
 
 
-def edit_context(m):
-    press("ctrl-9")
-    switcher.switch_app("Atom")
-    atom.open_fuzzy_file(m)
+# def edit_context(m):
+#     press("ctrl-9")
+#     switcher.switch_app("Atom")
+#     atom.open_fuzzy_file(m)
 
 
 ctx.keymap(
@@ -64,11 +64,13 @@ ctx.keymap(
         "talon map <dgndictation>": ("'", text, "': ,", Key("left")),
         "talon map string <dgndictation>": format_text("'{0}': '{0}',"),
         "dragon dictation": "<dgndictation>",
-        "stir": ["Str()(None)"] + [Key("left")] * 7,
+        # "stir": ["Str()(None)"] + [Key("left")] * 7,
         "add alternative [<dgndictation>]": add_alternative,
         "dragon abbreviation {basic_keys.keymap}+": dragon_abbreviation,
+        "yeller leader": "LEADER",
     }
 )
 
-global_ctx = Context("talon_editor_global")
-global_ctx.keymap({"edit context <dgndictation>": edit_context})
+# global_ctx = Context("talon_editor_global")
+# global_ctx.keymap({"edit context <dgndictation>": edit_context})
+# TODO: make this work with vim

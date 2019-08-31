@@ -69,6 +69,9 @@ def resize_window(x, y, w, h):
     rect.y += rect.height * y
     rect.width *= w
     rect.height *= h
+    global avoid_bottom
+    if avoid_bottom:
+        rect.height -= 20
     win.rect = rect
 
 
@@ -130,23 +133,42 @@ def window_move_application_screen(m):
     )
 
 
+avoid_bottom = True
+
+# def toggle_avoid_bottom(m):
+#     global avoid_bottom
+#     avoid_bottom = not avoid_bottom
+
+def avoid_bottom_on(m):
+    global avoid_bottom
+    avoid_bottom = True
+
+def avoid_bottom_off(m):
+    global avoid_bottom
+    avoid_bottom = False
+
+#TODO: autodetect application and apply avoid bottom or not
+
 ctx = Context("window_management")
 ctx.keymap(
     {
-        "snap left": grid(1, 1, 2, 1),
-        "snap right": grid(2, 1, 2, 1),
+        # "(toggle avoid bottom | avoid bottom (on | off))": toggle_avoid_bottom,
+        "avoid bottom on": avoid_bottom_on,
+        "avoid bottom off": avoid_bottom_off,
+        "(snap | window) left": grid(1, 1, 2, 1),
+        "(snap | window) right": grid(2, 1, 2, 1),
         "snap top": grid(1, 1, 1, 2),
         "snap bottom": grid(1, 2, 1, 2),
-        "snap top left": grid(1, 1, 2, 2),
-        "snap top right": grid(2, 1, 2, 2),
-        "snap bottom left": grid(1, 2, 2, 2),
-        "snap bottom right": grid(2, 2, 2, 2),
-        "snap (screen | window)": grid(1, 1, 1, 1),
+        "snap (top | upper) left": grid(1, 1, 2, 2),
+        "snap (top | upper) right": grid(2, 1, 2, 2),
+        "snap (bottom | lower) left": grid(1, 2, 2, 2),
+        "snap (bottom | lower) right": grid(2, 2, 2, 2),
+        "(snap screen | window max)": grid(1, 1, 1, 1),
         "snap center": grid(2, 2, 8, 8, 6, 6),
         "snap next": next_screen,
         "snap last": previous_screen,
-        "window [move] next screen": next_screen,
-        "window [move] preev screen": previous_screen,
+        "window next screen": next_screen,
+        "window preev screen": previous_screen,
         "window [move] screen" + utils.numerals: window_move_screen,
         "[window] [move] {switcher.running} [to] screen "
         + utils.numerals: window_move_application_screen,

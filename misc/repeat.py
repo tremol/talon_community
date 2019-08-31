@@ -38,10 +38,10 @@ ctx.keymap(
     {
         "wink": Rep(1),
         "creek": RepPhrase(1),
-        "soup": Rep(1),
-        "trace": Rep(2),
-        "quarr": Rep(3),
-        "fypes": Rep(4),
+        "soup": Rep(2),
+        "trace": Rep(3),
+        "quarr": Rep(4),
+        "fypes": Rep(5),
         "(repeat | repple)" + utils.numerals: repeat,
     }
 )

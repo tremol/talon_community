@@ -7,7 +7,7 @@ from talon import ui, resource, ctrl, cron
 from talon.voice import Key, Context, press
 
 from .. import utils
-from . import last_phrase
+# from . import last_phrase
 
 
 single_digits = "0123456789"
@@ -50,7 +50,7 @@ def window_move_space(m):
 def desk(m):
     desktop_number = NAMED_DESKTOPS[m["spaces.named_desktops"][0]]
     press(f"ctrl-{desktop_number}")
-    cron.after('300ms', last_phrase.history.refresh)
+    # cron.after('300ms', last_phrase.history.refresh)
 
 
 keymap = {
