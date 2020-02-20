@@ -1,7 +1,8 @@
-from talon import ctrl, app
+from talon import ctrl, app, ui
 from talon.audio import noise
 from ..misc import continuous_scroll
 from ..utils import is_vim
+from talon.voice import Context, Key
 
 class config:
     enabled = False
@@ -52,39 +53,47 @@ class NoiseModel:
         noise.register('noise', self.on_noise)
 
     def on_noise(self, noise):
-        print("noise")
         if noise == 'hiss_start':
+            print("noise: hiss_start")
             if config.enabled:
                 continuous_scroll.stopScrolling(None)
                 continuous_scroll.startScrolling(config.scroll_rate)(None)
         elif noise == 'hiss_end':
+            print("noise: hiss_end")
             if config.enabled:
                 continuous_scroll.stopScrolling(None)
 
 
 model = NoiseModel()
 
-# Disable automatically when certain apps come into focus. Code borrowed from menu.py
+# Disable automatically when certain apps come into focus. Code adapted from menu.py
 
-from talon import ui
+# from talon import ui # moved to top
 
 def auto_toggle(app, win):
-    if is_vim(app, win):
-        toggle_enabled("off")(None)
+    try:
+        if is_vim(app, win):
+            toggle_enabled("off")(None)
+    except:
+        pass
 
 def ui_event(event, arg):
     if event in ("app_activate", "app_launch", "app_close", "win_open", "win_close"):
         global last_app
         global last_win
         current_app = ui.active_app()
-        current_win = ui.active_window()
+        try:
+            current_win = ui.active_window()
+        except:
+            current_win = None
         # Make sure the window has changed: prevents random toggles when using affected apps
         if (last_app, last_win) != (current_app, current_win):
             (last_app, last_win) = (current_app, current_win)
             auto_toggle(current_app, current_win)
 
 last_app = ui.active_app()
-last_win = ui.active_window()
+# last_win = ui.active_window()
+last_win = None
 
 ui.register("", ui_event)
 
@@ -94,7 +103,7 @@ ui.register("", ui_event)
 # included here to be more self-contained.
 ###########
 
-from talon.voice import Context, Key
+# from talon.voice import Context, Key # moved to top
 
 ctx1 = Context("hiss_to_scroll")
 ctx1.keymap(

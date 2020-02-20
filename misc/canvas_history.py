@@ -27,7 +27,7 @@ class History:
         if cmd == 'p.end' and phrase:
             self.history.append(phrase)
             self.history = self.history[-hist_len:]
-            # self.canvas.freeze()
+            self.canvas.freeze()
 
     def draw(self, canvas):
         text = self.history[:]
@@ -55,7 +55,7 @@ class History:
             line_spacing = max(line_spacing, trect.height)
             text_top = min(text_top, y - trect.height)
 
-        x = canvas.x + 1280 - 2*rect_pad - width
+        x = canvas.x + ui.main_screen().width - 2*rect_pad - width
 
         line_spacing += text_pad
         text_bot = y + (len(text) - 1) * line_spacing

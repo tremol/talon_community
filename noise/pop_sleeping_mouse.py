@@ -4,6 +4,7 @@ from talon import ctrl
 from talon.audio import noise
 from talon_plugins import eye_mouse
 from talon_plugins import eye_zoom_mouse
+from . import pop_control as pc
 
 # With this enabled, the first pop will turn the eye mouse on,
 # and the second pop will click. The second pop can be replaced with
@@ -29,22 +30,26 @@ class NoiseModel:
         noise.register("noise", self.on_noise)
 
     def on_noise(self, noise):
-        if config.enabled and noise == 'pop':
-            now = time.time()
-            if noise == 'pop' and eye_zoom_mouse.zoom_mouse.enabled:
-                return
-            elif noise == 'pop' and config.enabled:
-                if now - self.last_click < config.double_click:
+        print("noise: pop")
+        if pc.PopControl.mode == pc.PopControl.MOUSE and noise == 'pop':
+            if config.enabled:
+                now = time.time()
+                if noise == 'pop' and eye_zoom_mouse.zoom_mouse.enabled:
+                    return
+                elif noise == 'pop' and config.enabled:
+                    if now - self.last_click < config.double_click:
+                        ctrl.mouse_click(button=0, hold=16000)
+                        self.last_click = now
+                    elif eye_mouse.config.control_mouse:
+                        ctrl.mouse_click(button=0, hold=16000)
+                        self.last_click = now
+                        eye_mouse.control_mouse.toggle()
+                    else:
+                        eye_mouse.control_mouse.toggle()
+                    return
+                elif noise == 'pop':
                     ctrl.mouse_click(button=0, hold=16000)
-                    self.last_click = now
-                elif eye_mouse.config.control_mouse:
-                    ctrl.mouse_click(button=0, hold=16000)
-                    self.last_click = now
-                    eye_mouse.control_mouse.toggle()
-                else:
-                    eye_mouse.control_mouse.toggle()
-                return
-            elif noise == 'pop':
+            else:
                 ctrl.mouse_click(button=0, hold=16000)
 
 model = NoiseModel()

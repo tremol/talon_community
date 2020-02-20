@@ -62,7 +62,8 @@ def remove_dragon_junk(word):
     if word == ".\\point\\point":
         return "point"
     else:
-        return str(word).lstrip("\\").split("\\", 1)[0].replace("-", " ").strip()
+        # return str(word).lstrip("\\").split("\\", 1)[0].replace("-", " ").strip()
+        return str(word).lstrip("\\").split("\\", 1)[0].strip()
 
 
 def remove_appostrophe_s(words):

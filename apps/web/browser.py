@@ -10,14 +10,14 @@ from ... import utils
 lag = 0.2
 using_tridactyl = False
 using_vimium = True
-BROWSERS = ["com.google.Chrome", "org.mozilla.firefox"]
+BROWSERS = ["com.google.Chrome", "org.mozilla.firefox", "com.apple.Safari"]
 
 
 def get_url(win=None):
     if win is None:
         win = ui.active_window()
 
-    if win.app.bundle == "com.google.Chrome":
+    if win.app.bundle in BROWSERS:
         return win.children.find(AXTitle="Address and search bar")[0].AXValue
     else:
         raise ValueError("no method for getting url from not chrome yet")
@@ -38,7 +38,7 @@ def navigate_to_url(url, win=None):
 
 def url_matches_func(url_pattern):
     def func(app, win):
-        if win.app.bundle == "com.google.Chrome":
+        if win.app.bundle in BROWSERS:
             return re.fullmatch(url_pattern, get_url(win))
         else:
             return False

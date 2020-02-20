@@ -5,6 +5,7 @@
 import time
 from talon import ctrl, tap, ui
 from talon.voice import Context, Key
+from talon_plugins import eye_mouse
 
 ctx = Context("mouse")
 
@@ -91,6 +92,9 @@ def mouse_center(m):
     ctrl.mouse_move(*center)
 
 def mouse_go_away(m):
+    if eye_mouse.config.control_mouse:
+        eye_mouse.control_mouse.toggle()
+
     win = ui.active_window()
     rect = win.rect
     center = (rect.x + rect.width * 0.95, rect.y + rect.height / 4)
@@ -117,11 +121,16 @@ def control_shift_click(m, button=0, times=1):
     ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
     ctrl.key_press("shift", ctrl=True, shift=True, up=True)
 
+def command_shift_click(m, button=0, times=1):
+    ctrl.key_press("shift", cmd=True, shift=True, down=True)
+    ctrl.mouse_click(x, y, button=button, times=times, wait=16000)
+    ctrl.key_press("shift", cmd=True, shift=True, up=True)
+
 
 keymap = {
     # jsc modified with some voice-code compatibility
     "righty": delayed_right_click,
-    "click": delayed_click,
+    "clicker": delayed_click,
     "(dubclick | duke)": delayed_dubclick,
     "(tripclick | triplick)": delayed_tripclick,
     "drag": mouse_drag,
@@ -129,9 +138,11 @@ keymap = {
     "shift click": shift_click,
     "(command click | chom lick)": command_click,
     "(control shift click | troll shift click)" : control_shift_click,
+    "command shift click" : command_shift_click,
+    "(command shift double click | synctech)": lambda m: command_shift_click(m, 0, 2),
     "(control shift double click | troll shift double click)" : lambda m: control_shift_click(m, 0, 2),
     "do park": [delayed_dubclick, Key('cmd-v')],
-	"do koosh": [delayed_dubclick, Key('cmd-c')],
+    "do koosh": [delayed_dubclick, Key('cmd-c')],
 
     "wheel down": mouse_scroll(200),
     "wheel up": mouse_scroll(-200),

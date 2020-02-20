@@ -18,7 +18,7 @@ keymap = {
     "(angle | left angle | less than)": "<",
     "(rangle | are angle | right angle | greater than)": ">",
     "(star | asterisk)": "*",
-    "(pound [sign] | hash [sign] | octo | number sign)": "#",
+    "pound": "#",
     "percent [sign]": "%",
     "caret": "^",
     "at sign": "@",
@@ -33,13 +33,26 @@ keymap = {
     # "minquall": "-=",
     # "pluqual": "+=",
     # "starqual": "*=",
-    "triple quote": "'''",
+    "double prime": "''",
+    "double tick": "``",
+    "triple prime": "'''",
     "triple tick": "```",
     "[forward] dubslash": "//",
     "coal twice": "::",
     "(dot dot | dotdot)": "..",
     "(ellipsis | dot dot dot | dotdotdot)": "...",
     # unnecessary: use repetition commands?
+
+    "coif": ['""', Key("left")],
+    "posh": ["''", Key("left")],
+    # "(surround tics | surround glitch)": (False, surround("`")),
+    "prank": ["  ", Key("left")],
+    # "surround dunder": (False, surround("__")),
+    # "surround angler": (False, surround("<", ">")),
+    "brisk": ["[]", Key("left")],
+    "kirk": ["{}", Key("left")],
+    # "surround precoif": (False, surround('("', '")')),
+    "prex": ["()", Key("left")],
 }
 
 ctx.keymap(keymap)

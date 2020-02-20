@@ -43,8 +43,8 @@ symbols = normalise_keys(
         "(dot | period | point)": ".",
         "(semicolon | semi)": ";",
         "prime": "'",
-        "(square | L square | left square | left square bracket | bracket)": "[",
-        "(R square | right square | right square bracket | R bracket)": "]",
+        "bracket": "[",
+        "R bracket": "]",
         "(slash | forward slash)": "/",
         "(backslash | leader)": "\\",
         "(minus | dash)": "-",
@@ -118,15 +118,23 @@ def press_keys(m):
     for k in keys:
         press(k)
 
+from talon import app
+def upper_reminder(m):
+    app.notify(title="ash baker chain dog egg fox gig horse ice jake", body="king lash mule net oak page quail raft scout tide use vessel winch xray yacht zoo")
+def backspace_reminder(m):
+    app.notify(title="CHOP!")
 
 ctx = Context("basic_keys")
 ctx.keymap(
     {
         "uppercase {basic_keys.alphabet}+ [(lowercase | lower | sunk)]": uppercase_letters,
-        "(ship | sky) {basic_keys.alphabet}": uppercase_letters,
-        "{basic_keys.modifiers}* {basic_keys.alphabet}+": press_keys,
-        "{basic_keys.modifiers}* {basic_keys.digits}+": press_keys,
-        "{basic_keys.modifiers}* {basic_keys.keys}+": press_keys,
+        # "sky {basic_keys.alphabet}": uppercase_letters,
+        "sky {basic_keys.alphabet}": upper_reminder,
+        # "junk": backspace_reminder,
+        "uppers": upper_reminder,
+        "{basic_keys.modifiers}* {basic_keys.alphabet}": press_keys,
+        "{basic_keys.modifiers}* {basic_keys.digits}": press_keys,
+        "{basic_keys.modifiers}* {basic_keys.keys}": press_keys,
         "(go | {basic_keys.modifiers}+) {basic_keys.arrows}+": press_keys,
         "number {basic_keys.digits}+ [over]": press_keys,
         "tarsh": Key("shift-tab"),

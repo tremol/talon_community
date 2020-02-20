@@ -1,9 +1,11 @@
 import re
 
+from talon import app, ui
 from talon.voice import Context, Key, press
 
 from ..utils import is_filetype, snake_text, insert
 from .. import utils
+# from ..apps.web import jupyter as jup
 
 FILETYPES = (".py",)
 
@@ -100,10 +102,34 @@ def wrap_call(m):
 
     utils.snake_text(m)
 
+################# here instead of the jupyter context ###########
+
+class config:
+    enabled = False
+
+# this is mostly duplicated from hiss_to_scroll.py. Make a central location for this sometime.
+def toggle_enabled(setting="toggle"):
+    def _toggle_enabled(m):
+        if setting == "toggle":
+            config.enabled = not config.enabled
+        elif setting == "on":
+            config.enabled = True
+        elif setting == "off":
+            config.enabled = False
+
+        ctx2.reload() # enable/disable the python context
+        if config.enabled:
+            app.notify("Python commands", "Enabled")
+        else:
+            app.notify("Python commands", "Disabled")
+
+    return _toggle_enabled
+
+############################
+
 
 ctx.keymap(
     {
-        "dunder in it": "__init__",
         "dot pie": ".py",
         "dot pipe": ".py",
         "star (arguments | args)": "*args",
@@ -111,13 +137,46 @@ ctx.keymap(
         "raise value error": ["raise ValueError()", Key("left")],
         "raise not implemented error": "raise NotImplementedError()",
         "raise {global_python.exception}": raise_exception,
+
+    # for when using jupyter, not in a .py file
+    "toggle jupey": toggle_enabled(),
+    "toggle jupey on": toggle_enabled("on"),
+    "toggle jupey off": toggle_enabled("off"),
     }
 )
 ctx.set_list("exception", exceptions.keys())
 
-ctx = Context("python", func=is_filetype(FILETYPES))
-ctx.keymap(
+
+
+def enable_python(appl, window):
+    return is_filetype(FILETYPES)(appl, window) or config.enabled
+
+# TODO: fix these so they're still useful but don't conflict with vim so much
+ctx2 = Context("python", func=enable_python)
+ctx2.keymap(
     {
+        # Statements
+        "state (def | deaf | deft)": "def ",
+        "state if": "if ",
+        "state elif": "elif ",
+        "state else": "else:\n",
+        "state while": "while ",
+        "state for": "for ",
+        "state return": "return ",
+        "state class": "class ",
+        "state import": "import ",
+        "state assert": "assert ",
+
+        "(pad | op) for": " for ",
+        "(pad | op) in": " in ",
+        "(pad | op) if": " if ",
+        "(pad | op) and": " and ",
+        "(pad | op) or": " or ",
+        "(pad | op) not": " not ",
+        "(pad | op) as": " as ",
+
+        "doc string": ['"""  """'] + 4*[Key("left")],
+        "py print": ['print()', Key("left")],
         "self assign <dgndictation> [over]": [
             "self.",
             snake_text,
@@ -125,32 +184,34 @@ ctx.keymap(
             snake_text,
             "\n",
         ],
-        "self": "self",
-        "self dot": "self.",
+        "if name equals main": 'if __name__ == "__main__":\n',
+        "dunder in it": "__init__",
+        # "self": "self",
+        # "self dot": "self.",
         "self [(dot | doubt)] <dgndictation> [over]": ["self.", snake_text],
         "self [(dot | doubt)] private <dgndictation> [over]": ["self._", snake_text],
-        "import [<dgndictation>] [over]": ["import ", snake_text],
-        "from [<dgndictation>] [over]": ["from ", snake_text],
-        # this isn't easy to write because snake_text always assumes it is
-        # working on # the first <dgndictation>, but this command has two of
-        # them
-        # "from <dgndictation> import [<dgndictation>] [over]": from_import ,
-        "in": " in ",
-        "is": " is ",
-        "is not": " is not ",
-        "true": "True",
+        # "import [<dgndictation>] [over]": ["import ", snake_text],
+        # "from [<dgndictation>] [over]": ["from ", snake_text],
+        # # this isn't easy to write because snake_text always assumes it is
+        # # working on # the first <dgndictation>, but this command has two of
+        # # them
+        # # "from <dgndictation> import [<dgndictation>] [over]": from_import ,
+        # "in": " in ",
+        # "is": " is ",
+        # "is not": " is not ",
+        # "true": "True",
         "champ true": "True",
-        "false": "False",
+        # "false": "False",
         "champ false": "False",
-        "none": "None",
+        # "none": "None",
         "champ none": "None",
-        "F string": [lambda m: utils.paste_text("f'{}'"), Key("left"), Key("left")],
-        "wrap call [<dgndictation>]": wrap_call,
-        # "if": ["if :", Key("left")],
-        "else": "else:\n",
-        "with": ["with :", Key("left")],
-        "return [<dgndictation>] [over]": ["return ", snake_text],
-        "set trace": "import ipdb; ipdb.set_trace()",
+        # "F string": [lambda m: utils.paste_text("f'{}'"), Key("left"), Key("left")],
+        # "wrap call [<dgndictation>]": wrap_call,
+        # # "if": ["if :", Key("left")],
+        # "else": "else:\n",
+        # "with": ["with :", Key("left")],
+        # "return [<dgndictation>] [over]": ["return ", snake_text],
+        # "set trace": "import ipdb; ipdb.set_trace()",
     }
 )
 

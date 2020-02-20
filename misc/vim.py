@@ -1,5 +1,5 @@
 from talon.voice import Key, press, Str, Context
-from talon import applescript
+from talon import applescript, app
 from ..utils import is_vim, text
 
 
@@ -10,7 +10,8 @@ LEADER = "\\"
 ctx.keymap({
     # duplicating from generic editor:
     # meta
-    "(save it | sage)": Key("cmd-s"),
+    "(save it | sage)": [Key("escape"), Key("cmd-s")],
+    "randall sage": lambda m: app.notify('Just say "sage"!'),
     "(undo it | dizzle)": Key("cmd-z"),
     "(redo it | rizzle)": Key("cmd-shift-z"),
     # clipboard
@@ -26,9 +27,16 @@ ctx.keymap({
     # miscellaneous helpers
     "current directory": LEADER + "Tpwd", # :pwd<CR>
     "working directory": LEADER + "Tcwd", # :echo getcwd()<CR>
+    "[change] local directory here": LEADER + "Tlcd", # :lcd %%<CR>
+    "[change] local directory parent": LEADER + "Tlcp", # :lcd ..<CR>
+    "[change] local directory talon": LEADER + "Tlct", # :lcd ~/.talon/user/<CR>
     "(vim | venom) grep": LEADER + "Tvim", # :vim // **<Left><Left><Left><Left>
     "source config": LEADER + "Tvrc", # :source $MYVIMRC<CR>
     "sixty one a check": LEADER + "Tcsa", # [[w:lcd %%<CR>:!python3 ok -q <c-r><c-w><CR>
+    "create included file": LEADER + "Tlcf", # :lcd %:h<cr>f{yi{:E <c-r>".tex<cr>i%! TEX root = ../ProjectDocument_v2.tex<c-r><c-r>\\chapter{}<esc>:w<cr>:b#<cr>
+
+    # window and tab control
+    # "phrase"
 
     # for correcting accidental 6G instead of 6j/6k
     "line oops down": LEADER + "Gj",
@@ -38,10 +46,16 @@ ctx.keymap({
 
     # tree style notes
     "level one": [Key("escape"), LEADER + "Tnl1"], # o\|-- 
-    "new level": [Key("escape"), LEADER + "Tnnl"], # yypf-C-- ... sorta 
+    "new level": [Key("escape"), LEADER + "Tnlv"], # yypf-C-- ... sorta 
     "new sublevel": [Key("escape"), LEADER + "Tnsl"], # yypI\|   <Esc>f-C-- 
     "level up": [Key("escape"), LEADER + "Tnlu"], # I\|   <Esc>A
     "level down": [Key("escape"), LEADER + "Tnld"], # 0dt\|A
+    "new line": [Key("escape"), LEADER + "Tnnl"], # yyp^f-C   
+
+    # checklist shortcuts
+    "new checkbox": [Key("escape"), LEADER + "Tchn"], # o[ ] 
+    "check off item": [Key("escape"), LEADER + "Tchx"], # gmc^lrx`c
+    "uncheck item": [Key("escape"), LEADER + "Tchu"], # gmc^lr `c
 
     # basics
     "(vim | venom) save quit": LEADER + "Twqq", # :wq<CR>
@@ -52,9 +66,10 @@ ctx.keymap({
     "dizzle": Key('u'),
     "rizzle": Key('ctrl-r'),
     "(trough | window)": Key('ctrl-w'),
-    "kite": [Key("alt-right"), Key("ctrl-w")],
+    "kite": [Key("ctrl-o"), "de"],
     "nudgle": [Key("alt-left"), Key("backspace")],
     "jolt": "yyp",
+    "yank line": "yy",
     "shabble": Key("cmd-["),
         # nmap <D-[> <<
         # vmap <D-[> <gv
@@ -62,6 +77,7 @@ ctx.keymap({
         # nmap <D-]> >>
         # vmap <D-]> >gv
     "moment": Key("ctrl-o"),
+    "auto complete": [Key("ctrl-x"), Key("ctrl-o")],
 
 
     # aesthetics
@@ -69,11 +85,14 @@ ctx.keymap({
     "color scheme": ":colorscheme ",
 
     # Plugins
-    "toggle nerdy [tree]": LEADER + "n",
-        # map <leader>n :NERDTreeToggle<CR>
+    "toggle nerdy [tree]": LEADER + "n", # :NERDTreeToggle<CR>
+    "nerd tree find": LEADER + "nf", # :NERDTreeFind<CR>
     "startify": LEADER + "st",
         # map <leader>st :Startify<CR>
     "airline refresh": LEADER + "Talr", # :AirlineRefresh<CR>
+    "Pomodoro today": LEADER + "pt", # :PomodoroToDoToday<CR>
+    "Pomodoro open archive": LEADER + "pa", # :PomodoroOpenArchive<CR>
+    "Pomodoro perform archive": LEADER + "pp", # :PomodoroPerformArchive<CR>
 
     # vundle
     "plugin install": LEADER + "Tpli", # :PluginInstall<CR>
@@ -108,6 +127,10 @@ ctx.keymap({
     "[toggle] cursor column": "you",
     "toggle wrap": "you",
     "[toggle] crosshairs": "yox",
+
+    # jupyter interaction
+    "start jupyter": LEADER + "Tjpy", # :!jupyter qtconsole &
+    "connect to jupyter": LEADER + "Tjcn", # :JupyterConnect<cr>
 
     # buffer shortcuts
     "buffer name [<dgndictation>]": [":b ", text],

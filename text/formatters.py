@@ -1,4 +1,4 @@
-from talon.voice import Word, Context, press
+from talon.voice import Word, Context, press, Key
 from talon import clip
 
 from ..utils import (
@@ -50,6 +50,7 @@ formatters = normalise_keys(
             lambda i, word, _: "@" + word if i == 0 else word.capitalize(),
         ),
         "(criff | criffed)": (True, lambda i, word, _: word.capitalize()),
+        "dotcriffed": (True, lambda i, word, _: "." + word.capitalize() if i == 0 else word.capitalize()),
         "tridal": (False, lambda i, word, _: word.capitalize()),
         "snake": (True, lambda i, word, _: word if i == 0 else "_" + word),
         "dotsnik": (True, lambda i, word, _: "." + word if i == 0 else "_" + word),
@@ -62,16 +63,16 @@ formatters = normalise_keys(
 
 surrounders = normalise_keys(
     {
-        "(dubstring | coif)": (False, surround('"')),
-        "(string | posh)": (False, surround("'")),
-        "(tics | glitch)": (False, surround("`")),
-        "(padded | prank)": (False, surround(" ")),
-        "dunder": (False, surround("__")),
-        "angler": (False, surround("<", ">")),
-        "brisk": (False, surround("[", "]")),
-        "kirk": (False, surround("{", "}")),
-        "precoif": (False, surround('("', '")')),
-        "prex": (False, surround("(", ")")),
+        "(surround dubstring | surround coif)": (False, surround('"')),
+        "(surround string | surround posh)": (False, surround("'")),
+        "(surround tics | surround glitch)": (False, surround("`")),
+        "surround prank": (False, surround(" ")),
+        "surround dunder": (False, surround("__")),
+        "surround angler": (False, surround("<", ">")),
+        "surround brisk": (False, surround("[", "]")),
+        "surround kirk": (False, surround("{", "}")),
+        "surround precoif": (False, surround('("', '")')),
+        "surround prex": (False, surround("(", ")")),
     }
 )
 
@@ -111,13 +112,19 @@ def FormatText(m):
             press("left")
 
 
-ctx = Context("formatters")
+# from ..noise import pop_control as pc
 
+ctx = Context("formatters")
+# ctx = Context("formatters", func=lambda app, window: pc.PopControl.mode != pc.PopControl.DICTATION)
 ctx.keymap(
     {
-        "(phrase | say) <dgndictation> [over]": spoken_text,
-        "derek [<dgndictation>] [over]": [" ", spoken_text],
+        "phrase <dgndictation> [over]": spoken_text,
+        "phrase <dgndictation> [tree]": [spoken_text, " tree"],
+        "phrase <dgndictation> [subtree]": [spoken_text, " subtree"],
+
         "squash <dgndictation> [over]": text,
+        "derek [<dgndictation>] [over]": [" ", spoken_text],
+        "darren [<dgndictation>] [over]": [Key("cmd-right"), " ", spoken_text],
         "(sentence | champ) <dgndictation> [over]": sentence_text,
         "(comma | ,) <dgndictation> [over]": [", ", spoken_text],
         "period <dgndictation> [over]": [". ", sentence_text],
@@ -127,3 +134,5 @@ ctx.keymap(
         "(%s)+" % (" | ".join(surrounders)): FormatText,
     }
 )
+
+

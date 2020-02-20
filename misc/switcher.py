@@ -47,7 +47,10 @@ ctx.keymap(
         "launch {switcher.launch}": launch_app,
         # custom switchers here
         # "madam": lambda x: switch_app(x, "Atom"),
-        "fox web": lambda x: switch_app(x, "Chrome"),
+        "fox web": lambda x: switch_app(x, "Safari"),
+        "matthew": lambda x: switch_app(x, "Mathematica"),
+        "vimmy": lambda x: switch_app(x, "MacVim"),
+        "jupey": lambda x: switch_app(x, "python3.7"),
         "system preferences": lambda x: switch_app(x, "System Preferences"),
     }
 )
